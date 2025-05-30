@@ -23,9 +23,9 @@
             --h1-color: var(--accent-color-secondary);
             --h2-color: var(--accent-color-main);
             --h3-color: #4A148C; 
-            --h4-color: #D32F2F; /* Original red for H4 content headings */
-            --summary-generic-bg: #e8f0f0; /* Slightly darker light teal/grey for generic summaries */
-            --summary-generic-text: #004d4d; /* Darker teal text for generic summaries */
+            --h4-color: #D32F2F; 
+            --summary-generic-bg: #e8f0f0; 
+            --summary-generic-text: #004d4d; 
         }
 
         body {
@@ -139,7 +139,7 @@
             border-bottom: 3px solid var(--h1-color);
             letter-spacing: 0.5px;
         }
-        h2 {
+        h2 { /* Estilo base para H2, usado por otros encabezados de sección */
             font-family: var(--secondary-font);
             color: var(--h2-color);
             margin-top: 40px; 
@@ -152,29 +152,6 @@
             gap: 12px;
             border-bottom: 2px solid var(--border-color);
         }
-        h2.collapsible-h2 summary { /* For H2s that are part of a details/summary structure */
-            font-size: 1em; /* Reset font size to inherit from parent h2 */
-            font-weight: inherit;
-            color: inherit;
-            padding: 0;
-            border-bottom: none;
-            background-color: transparent;
-            display: flex; /* Ensure it aligns with H2's flex */
-            align-items: center;
-            width: 100%;
-        }
-         h2.collapsible-h2 summary:hover {
-            background-color: transparent;
-         }
-        h2.collapsible-h2 summary::after { /* Arrow for collapsible H2 */
-            font-size: 0.8em;
-            margin-left: auto; /* Push arrow to the right */
-            color: var(--h2-color); /* Match H2 color */
-        }
-        h2.collapsible-h2 + div { /* Content for collapsible H2 */
-            padding-top: 10px;
-        }
-
 
         h3 {
             font-family: var(--secondary-font);
@@ -259,46 +236,50 @@
         }
 
         details {
-            background-color: var(--container-bg); /* White background for the details block itself */
+            background-color: var(--container-bg); 
             border: 1px solid var(--border-color);
             border-radius: 8px;
             margin-bottom: 15px;
-            overflow: hidden; /* Important for border-radius on children */
+            overflow: hidden; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        summary { 
-            background-color: var(--summary-generic-bg); /* NEW: Light teal/grey background */
-            padding: 15px 20px; /* Slightly reduced padding */
+        details > summary { /* Selector más específico para summaries directos de details */
+            background-color: var(--summary-generic-bg); 
+            padding: 15px 20px; 
             font-weight: bold;
             cursor: pointer;
             outline: none;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            color: var(--summary-generic-text); /* NEW: Darker teal text */
-            border-bottom: 1px solid var(--border-color);
+            color: var(--summary-generic-text); 
+            border-bottom: 1px solid var(--border-color); /* Borde para summary cerrado */
             transition: background-color 0.2s ease;
         }
-        summary:hover {
-            background-color: #dce7e7; /* Slightly darker on hover */
+        details > summary:hover {
+            background-color: #dce7e7; 
         }
-        details[open] > summary { /* Generic summary when open */
+        details[open] > summary { 
             background-color: #d5e0e0; 
-            border-bottom: 1px solid #c8d3d3; /* Slightly darker border when open */
+            border-bottom-color: #c8d3d3; 
         }
-        details summary::-webkit-details-marker { display: none; }
-        details summary::after { /* Arrow for generic summaries */
+        /* Ocultar el marcador de detalles predeterminado */
+        details > summary::-webkit-details-marker { display: none; }
+        details > summary::marker { display: none; } /* Para Firefox */
+
+        details > summary::after { 
             content: '▼';
             font-size: 0.9em;
             transition: transform 0.2s ease;
-            color: var(--summary-generic-text); /* Match text color */
+            color: var(--summary-generic-text); 
+            margin-left: 10px; /* Asegura espacio si el texto es largo */
         }
-        details[open] summary::after {
+        details[open] > summary::after {
             transform: rotate(180deg);
         }
         .details-content {
             padding: 20px;
-            background-color: var(--container-bg); /* Ensures content area is white */
+            background-color: var(--container-bg); 
         }
 
         /* City Sections */
@@ -306,7 +287,7 @@
             border: 1px solid var(--accent-color-main); 
             border-radius: 10px;
         }
-        .city-section > summary { /* Direct child summary of city-section */
+        .city-section > summary { 
             background-color: var(--accent-color-main); 
             color: white; 
             font-size: 1.8em; 
@@ -328,12 +309,18 @@
         
         /* Nested details within city-content or details-content */
         .city-content details summary, 
-        .details-content details summary {
+        .details-content details summary { /* Summary de details anidados */
             background-color: var(--summary-generic-bg);
             color: var(--summary-generic-text);
-            font-size: 1.1em; /* Smaller for nested summaries */
+            font-size: 1.1em; 
             padding: 12px 15px;
+            border-top: 1px solid var(--border-color); /* Añade un separador superior para anidados */
         }
+        .city-content details:first-child > summary,
+        .details-content details:first-child > summary {
+             border-top: none; /* Evitar doble borde si es el primer details anidado */
+        }
+
         .city-content details[open] summary,
         .details-content details[open] summary {
             background-color: #d5e0e0;
@@ -344,14 +331,14 @@
          }
 
 
-        .map-link, .generic-button { /* Added .generic-button for consistency */
+        .map-link, .generic-button { 
             display: inline-block;
             margin-left: 8px;
             font-size: 0.9em;
             color: var(--accent-color-main); 
             text-decoration: none;
             padding: 8px 12px;
-            background-color: #e0f2f1; /* Light teal background for button */
+            background-color: #e0f2f1; 
             border: 1px solid var(--accent-color-main);
             border-radius: 5px;
             transition: background-color 0.2s ease, color 0.2s ease;
@@ -362,50 +349,110 @@
             text-decoration: none;
         }
 
-        /* Itinerary Styles */
-        #itinerario-details summary { /* Style for the main itinerary collapsible summary */
-            font-size: 1.9em; /* Match H2 styling */
+        /* Itinerary Styles - Ajustes para compacidad y alineación */
+        details#itinerario-details {
+            border: none; /* Sin borde propio si se quiere que el summary actúe como H2 visualmente */
+            box-shadow: none; /* Sin sombra propia */
+            margin-bottom: 20px;
+        }
+
+        details#itinerario-details > summary {
+            /* Hereda estilos de H2 visualmente */
+            font-family: var(--secondary-font);
+            color: var(--h2-color);
+            font-size: 1.9em; 
             font-weight: 700;
+            padding: 10px 0; /* Padding vertical, sin padding horizontal para que ocupe ancho */
+            border-bottom: 2px solid var(--border-color); 
+            background-color: transparent; 
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Alinea contenido a la izquierda */
+            width: 100%;
+            cursor: pointer;
+        }
+        details#itinerario-details > summary:hover {
+            background-color: #f9f9f9; 
+        }
+
+        /* El H2 dentro del summary del itinerario */
+        details#itinerario-details > summary h2#itinerario {
+            margin: 0; 
+            padding: 0; 
+            border: none; 
+            font-size: 1em; /* Hereda el tamaño del summary (1.9em) */
+            font-weight: inherit; 
+            color: inherit; 
+            display: inline-flex; 
+            align-items: center;
+            gap: 12px; 
+            flex-grow: 1; /* Permite que el H2 ocupe el espacio disponible */
+        }
+
+        details#itinerario-details > summary::after { /* Flecha para el itinerario principal */
+            content: '▼';
+            font-size: 0.7em; 
             color: var(--h2-color);
-            background-color: transparent;
-            border-bottom: 2px solid var(--border-color);
-            padding: 10px 0; /* Adjust padding to align with H2 */
+            margin-left: 20px; /* Empuja la flecha un poco más a la derecha del texto */
         }
-        #itinerario-details[open] summary {
-            background-color: transparent;
+
+        details#itinerario-details[open] > summary {
+            border-bottom-color: var(--accent-color-main); /* Borde acentuado cuando está abierto */
         }
-        #itinerario-details summary::after {
-            color: var(--h2-color);
-        }
-        #itinerario-details .details-content { /* Content of main itinerary */
-             padding: 5px 0 0 0; /* Reduced padding */
+
+        #itinerario-details .details-content {
+            padding: 15px 0px 0px 10px; /* Padding superior e izquierdo para el contenido */
+            font-size: 1em; /* Tamaño de fuente base para el contenido del itinerario */
         }
 
         .itinerary-day {
-            margin-bottom: 15px; /* Reduced margin */
-            padding-bottom: 10px; /* Reduced padding */
-            border-bottom: 1px dotted var(--border-color);
+            margin-bottom: 12px; 
+            padding-bottom: 12px; 
+            border-bottom: 1px dotted #e0e0e0;
         }
         .itinerary-day:last-child {
             border-bottom: none;
+            padding-bottom: 0;
         }
-        .itinerary-day h4 { 
-             color: var(--h4-color); 
-             margin-top: 10px; /* Reduced margin */
-             margin-bottom: 8px; /* Reduced margin */
-             font-size: 1.15em; /* Slightly smaller */
-             border-bottom: none; 
-             padding-left: 0;
-             border-left: none;
+
+        .itinerary-day h4 { /* Títulos de días */
+            color: var(--h4-color);
+            margin-top: 8px; 
+            margin-bottom: 6px; 
+            font-size: 1.1em; 
+            font-weight: bold; /* Asegurar negrita */
+            border-bottom: none;
+            padding-left: 0;
+            border-left: none;
+            display: flex; 
+            align-items: center;
+            gap: 8px; 
         }
-         .itinerary-day ul {
-            list-style-type: '✈️ '; 
-            padding-left: 20px;
-            font-size: 0.95em; /* Slightly smaller font */
-         }
-         .itinerary-day ul li {
-            margin-bottom: 4px; /* Reduced margin */
-         }
+        .itinerary-day h4 span[role="img"] { /* Ajustar tamaño del emoji si es necesario */
+            font-size: 1.1em;
+        }
+
+
+        .itinerary-day ul {
+            list-style-type: none; /* Quitar viñeta por defecto */
+            padding-left: 5px; /* Reducir padding para alineación */
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-size: 0.9em; /* Más compacto */
+        }
+
+        .itinerary-day ul li {
+            margin-bottom: 4px; 
+            padding-left: 22px; /* Espacio para el emoji y texto */
+            position: relative; /* Para posicionar el emoji */
+        }
+        .itinerary-day ul li::before {
+            content: '✈️'; /* Emoji como viñeta */
+            position: absolute;
+            left: 0;
+            top: 1px; /* Ajuste vertical fino */
+            font-size: 0.9em; /* Tamaño del emoji */
+        }
 
 
         @media (max-width: 768px) {
@@ -423,11 +470,12 @@
                 top: 15px;
             }
             h1 { font-size: 2em; }
-            h2, #itinerario-details summary { font-size: 1.7em; }
+            h2, details#itinerario-details > summary { font-size: 1.7em; }
             h3 { font-size: 1.3em; }
             h4 { font-size: 1.15em; }
             .container { padding: 20px; }
-            .city-section summary { font-size: 1.6em; padding: 18px 22px;}
+            .city-section > summary { font-size: 1.6em; padding: 18px 22px;}
+
         }
 
         @media (max-width: 600px) {
@@ -437,16 +485,18 @@
             }
             .container { padding: 15px; margin: 15px auto; }
             h1 { font-size: 1.8em; }
-            h2, #itinerario-details summary { font-size: 1.5em; }
+            h2, details#itinerario-details > summary { font-size: 1.5em; }
             h3 { font-size: 1.2em; }
             h4, .itinerary-day h4 { font-size: 1.1em; }
             ul, ol { padding-left: 20px; }
-            summary, 
+            details > summary, 
             .city-content details summary, 
             .details-content details summary  { padding: 12px 15px; font-size: 0.9em; }
             .details-content { padding: 15px; }
-            .city-section summary { font-size: 1.5em; padding: 18px 20px; }
+            .city-section > summary { font-size: 1.5em; padding: 18px 20px; }
             .city-content { padding: 18px; }
+            .itinerary-day ul { font-size: 0.85em; }
+            .itinerary-day ul li::before { font-size: 0.85em; }
         }
     </style>
 </head>
@@ -487,7 +537,7 @@
             <h3><span role="img" aria-label="mapa">🗺️</span> Mapas y Ubicaciones Clave</h3>
             <ul>
                 <li>Braian se encargará de armar un <strong>mapita</strong> de los lugares a visitar, con íconos de sushi 🍣 para restaurantes.</li>
-                <li><strong>Mapa MUST de Japón (no editable):</strong> <a href="https://www.google.com/maps/d/viewer?mid=1Y9s0s7o4z9W5wZ2j2X5Y8n3j1Hc&usp=sharing" target="_blank">Mapa de Hideto Nakamura</a>. (Ejemplo de link funcional).</li>
+                <li><strong>Mapa MUST de Japón (no editable):</strong> <a href="https://www.google.com/maps/d/viewer?mid=1Y0KmSPdCRoAlQNz3jp8ort359sA&hl=en_US" target="_blank">Mapa de Hideto Nakamura</a>. (Ejemplo de link funcional).</li>
             </ul>
 
             <h3><span role="img" aria-label="cambio de divisa">💸</span> Cambio de Divisas y Pagos</h3>
@@ -507,7 +557,7 @@
             
             <details id="itinerario-details">
                 <summary>
-                    <h2 id="itinerario" class="collapsible-h2" style="border-bottom: none; margin-bottom:0;"><span role="img" aria-label="calendario">📅</span> Itinerario Detallado</h2>
+                    <h2 id="itinerario" style="border-bottom: none; margin-bottom:0; width: auto; /* Ajuste para que no ocupe todo el ancho y permita la flecha */"><span role="img" aria-label="calendario">📅</span> Itinerario Detallado</h2>
                 </summary>
                 <div class="details-content">
                     <div class="itinerary-day">
@@ -738,7 +788,7 @@
                                  <li><strong>Goshuincho:</strong> El del Santuario Meiji es muy recomendado.</li>
                                 <li><strong>Tiendas Destacadas en Harajuku:</strong>
                                     <ul>
-                                         <li><strong>DAISO Harajuku (Takeshita Street):</strong> <a href="https://goo.gl/maps/3j9fT8kM6w7R5xUbA" target="_blank" class="map-link">Ver en Google Maps</a> (Hay varias tiendas Daiso, esta es céntrica).</li>
+                                         <li><strong>DAISO Harajuku (Takeshita Street):</strong> <a href="https://goo.gl/maps/L7W8mZ3oY4xN8XJo8" target="_blank" class="map-link">Ver en Google Maps</a> (Hay varias tiendas Daiso, esta es céntrica).</li>
                                     </ul>
                                 </li>
                             </ul>
@@ -903,7 +953,7 @@
                                         <li><strong>Página Oficial:</strong> <a href="https://www.expo2025.or.jp/en/" target="_blank">expo2025.or.jp/en/</a></li>
                                         <li><strong>Mapa General:</strong> <a href="https://www.expo2025.or.jp/wp/wp-content/themes/expo2025orjp_2022/assets/pdf/expo-map-index/map/map01_A4_color_en.pdf" target="_blank">PDF del mapa</a></li>
                                         <li><strong>Guía de Alan x el Mundo:</strong> <a href="https://alanxelmundo.com/guia-para-visitar-la-expo-universal-2025-en-osaka/" target="_blank">Guía completa</a>. Recomienda reservar los pabellones con anticipación.</li>
-                                        <li><strong>Video de Alan x el Mundo:</strong> <a href="https://www.youtube.com/watch?v=exampleVideoID" target="_blank">Video de la Expo</a> (¡Nico está muy emocionado!).</li>
+                                        <li><strong>Video de Alan x el Mundo:</strong> <a href="https://www.youtube.com/watch?v=example" target="_blank">Video de la Expo</a> (¡Nico está muy emocionado!).</li>
                                         <li><strong>Ubicación en Google Maps:</strong> <a href="https://goo.gl/maps/jVzJjJ8Y7qQxYxYx5" target="_blank"><strong>Yumeshima Island</strong></a>.</li>
                                         <li><strong>Costo del Ticket de Entrada:</strong> <span class="highlight"><strong>46 euros</strong></span> (aprox.).</li>
                                         <li><strong>Tamaño:</strong> Es <span class="highlight">GIGANTE</span>.</li>
@@ -999,138 +1049,137 @@
             <hr>
             
             <h2 id="comida-general"><span role="img" aria-label="ramen">🍜</span> Guía de Comida General</h2>
-            <details>
-                <summary>Comida Rápida Japonesa (Cadenas Populares)</summary>
-                <div class="details-content">
-                    <p>Opciones ricas, rápidas y económicas para comer al paso. Precios promedio por plato.</p>
-                    <ul>
-                        <li><strong>MATSUYA (松屋):</strong> Muy popular para gyudon (bol de arroz con ternera), curry y otros platos. Barato y sabroso.</li>
-                        <li><strong>TENDON TENYA (天丼てんや):</strong> Especializado en tendon (bol de arroz con tempura). Aprox. 7 USD.</li>
-                        <li><strong>OOTOYA (大戸屋):</strong> Ofrece teishoku (menús fijos) de comida tradicional japonesa casera. Aprox. 7 USD.</li>
-                        <li><strong>YAYOIKEN (やよい軒):</strong> Similar a OOTOYA, con menús teishoku, un poco más barato.</li>
-                        <li><strong>YAKINIKU LIKE (焼肉ライク):</strong> Para una experiencia de yakiniku (parrilla individual) rápida y económica. Aprox. 10 USD. Hay otros lugares de yakiniku más caros con mejor carne (wagyu) y más opciones.</li>
-                        <li><strong>KATSUYA (かつや):</strong> Especializado en katsudon (bol de arroz con chuleta de cerdo empanada y huevo) y tonkatsu (chuleta de cerdo empanada). Aprox. 6 USD.</li>
-                    </ul>
-                </div>
-            </details>
-            <details>
-                <summary>Cadenas de Sushi BBB (Bueno, Bonito, Barato)</summary>
-                <div class="details-content">
-                    <p>Sushi de cinta transportadora (kaiten-zushi) o con pedidos por tablet, buena relación calidad-precio. Aprox. 25-30 USD por persona para una comida completa.</p>
-                    <ul>
-                        <li><strong>SUSHIRO (スシロー)</strong></li>
-                        <li><strong>KURA SUSHI (くら寿司)</strong> (conocido por sus platillos de premio)</li>
-                        <li><strong>HAMA SUSHI (はま寿司)</strong></li>
-                    </ul>
-                </div>
-            </details>
-            
-            <h3 style="margin-top: 25px; font-size: 1.3em; color: var(--h3-color);"><span role="img" aria-label="puesto de comida">🥡</span> Comida Callejera y Especialidades por Ciudad</h3>
-            <details>
-                <summary>Tokio</summary>
-                <div class="details-content">
-                    <h4>Mercado Exterior de Tsukiji (築地場外市場)</h4>
-                     <p>Aunque el mercado mayorista se trasladó, el mercado exterior sigue siendo un paraíso para los amantes de la comida, especialmente mariscos frescos y snacks. Recomendable ir viernes o sábado por la mañana.</p>
-                    <ul>
-                        <li><strong>Brocheta de Anguila (Unagi Kushiyaki)</strong>.</li>
-                        <li><strong>Brocheta de tripa de anguila</strong>.</li>
-                        <li><strong>Tamagoyaki (Tortilla japonesa enrollada)</strong>, a menudo servida en brocheta.</li>
-                        <li><strong>Mariscos frescos:</strong> Ostras, vieiras a la parrilla, erizo de mar (uni).</li>
-                        <li><strong>Huevo de Salmón con erizo</strong> (1500¥) solo para probar 1, puede no ser del gusto de todos.</li>
-                    </ul>
-                    <h4>Otras zonas:</h4>
-                    <ul>
-                        <li><strong>Calle Nakamise (Asakusa):</strong> Senbei (galletas de arroz), agemanju (bollos fritos dulces), kibi dango.</li>
-                        <li><strong>Takeshita Street (Harajuku):</strong> Crepes, algodón de azúcar gigante, takoyaki de sabores curiosos.</li>
-                        <li><strong>Ameyoko (Ueno):</strong> Fruta fresca en brochetas, takoyaki, kebabs.</li>
-                        <li><strong>Omoide Yokocho (Shinjuku):</strong> Yakitori y otros platos en pequeños puestos.</li>
-                    </ul>
-                </div>
-            </details>
-             <details>
-                <summary>Osaka ("La Cocina de Japón")</summary>
-                <div class="details-content">
-                    <h4>Dotonbori (道頓堀) y Namba (難波)</h4>
-                    <p>El epicentro de la cultura "kuidaore" (comer hasta reventar). Imprescindible probar:</p>
-                    <ul>
-                        <li><strong>Takoyaki (たこ焼き):</strong> Bolitas de masa rellenas de pulpo.</li>
-                        <li><strong>Okonomiyaki (お好み焼き):</strong> Especie de "pizza/pancake" salada a la plancha con diversos ingredientes.</li>
-                        <li><strong>Kushikatsu (串カツ):</strong> Brochetas empanadas y fritas de carne, pescado y verduras (típicas de Shinsekai también).</li>
-                    </ul>
-                    <h4>Kuromon Ichiba Market (黒門市場)</h4>
-                    <p>Famoso mercado cubierto con puestos de marisco fresco, carne (incluyendo Kobe), frutas y comida preparada. Los mercados suelen funcionar hasta las 5-6 PM.</p>
-                    <ul>
-                        <li>Recomendable: <strong>Anguila a la parrilla</strong> (1000¥ aprox.). Vieiras, atún.</li>
-                        <li>NO recomendable (según la nota original): Kobe beef burger y brochetas de wagyu (pueden estar sobrevaloradas en este contexto).</li>
-                        <li>Postre recomendado: <strong>Mochi de frutilla</strong> (ichigo daifuku, con la frutilla entera dentro o encima).</li>
-                    </ul>
-                    <h4>Otros en Osaka</h4>
-                     <ul>
-                        <li>Probar <strong>UDON con carne Wagyu</strong> (buscar restaurantes locales en lugar de cadenas).</li>
-                    </ul>
-                </div>
-            </details>
-            <details>
-                <summary>Kioto</summary>
-                <div class="details-content">
-                    <h4>Mercado Nishiki (錦市場 - "La Cocina de Kioto")</h4>
-                    <p>Largo y estrecho mercado cubierto con más de cien tiendas y puestos que venden productos locales, encurtidos de Kioto (tsukemono), dulces tradicionales (wagashi), té, sake, marisco y utensilios de cocina. Muchas opciones para probar comida callejera y especialidades locales. No necesariamente barata, pero de calidad.</p>
-                    <ul>
-                        <li>Yuba (nata de soja), tamagoyaki, mochi, senbei.</li>
-                    </ul>
-                    <h4>Gion y Pontocho</h4>
-                    <p>Además de la posibilidad de ver geishas, estas zonas ofrecen restaurantes de alta cocina kaiseki y opciones más informales.</p>
-                </div>
-            </details>
-            <details>
-                <summary>Nara</summary>
-                <div class="details-content">
-                    <ul>
-                        <li><strong>Yomogi Mochi en Nakatanidou:</strong> Mochi verde (hecho con artemisa) relleno de anko (pasta de judías dulces), famoso por cómo lo golpean a gran velocidad.</li>
-                        <li>Snacks y dulces cerca del Parque de Nara.</li>
-                    </ul>
-                </div>
-            </details>
+            <div class="details-content" style="padding-top:0; padding-left:0; padding-right:0;"> <details>
+                    <summary>Comida Rápida Japonesa (Cadenas Populares)</summary>
+                    <div class="details-content">
+                        <p>Opciones ricas, rápidas y económicas para comer al paso. Precios promedio por plato.</p>
+                        <ul>
+                            <li><strong>MATSUYA (松屋):</strong> Muy popular para gyudon (bol de arroz con ternera), curry y otros platos. Barato y sabroso.</li>
+                            <li><strong>TENDON TENYA (天丼てんや):</strong> Especializado en tendon (bol de arroz con tempura). Aprox. 7 USD.</li>
+                            <li><strong>OOTOYA (大戸屋):</strong> Ofrece teishoku (menús fijos) de comida tradicional japonesa casera. Aprox. 7 USD.</li>
+                            <li><strong>YAYOIKEN (やよい軒):</strong> Similar a OOTOYA, con menús teishoku, un poco más barato.</li>
+                            <li><strong>YAKINIKU LIKE (焼肉ライク):</strong> Para una experiencia de yakiniku (parrilla individual) rápida y económica. Aprox. 10 USD. Hay otros lugares de yakiniku más caros con mejor carne (wagyu) y más opciones.</li>
+                            <li><strong>KATSUYA (かつや):</strong> Especializado en katsudon (bol de arroz con chuleta de cerdo empanada y huevo) y tonkatsu (chuleta de cerdo empanada). Aprox. 6 USD.</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary>Cadenas de Sushi BBB (Bueno, Bonito, Barato)</summary>
+                    <div class="details-content">
+                        <p>Sushi de cinta transportadora (kaiten-zushi) o con pedidos por tablet, buena relación calidad-precio. Aprox. 25-30 USD por persona para una comida completa.</p>
+                        <ul>
+                            <li><strong>SUSHIRO (スシロー)</strong></li>
+                            <li><strong>KURA SUSHI (くら寿司)</strong> (conocido por sus platillos de premio)</li>
+                            <li><strong>HAMA SUSHI (はま寿司)</strong></li>
+                        </ul>
+                    </div>
+                </details>
+                
+                <h3 style="margin-top: 25px; font-size: 1.3em; color: var(--h3-color); border-left: none; padding-left:0;"><span role="img" aria-label="puesto de comida">🥡</span> Comida Callejera y Especialidades por Ciudad</h3>
+                <details>
+                    <summary>Tokio</summary>
+                    <div class="details-content">
+                        <h4>Mercado Exterior de Tsukiji (築地場外市場)</h4>
+                         <p>Aunque el mercado mayorista se trasladó, el mercado exterior sigue siendo un paraíso para los amantes de la comida, especialmente mariscos frescos y snacks. Recomendable ir viernes o sábado por la mañana.</p>
+                        <ul>
+                            <li><strong>Brocheta de Anguila (Unagi Kushiyaki)</strong>.</li>
+                            <li><strong>Brocheta de tripa de anguila</strong>.</li>
+                            <li><strong>Tamagoyaki (Tortilla japonesa enrollada)</strong>, a menudo servida en brocheta.</li>
+                            <li><strong>Mariscos frescos:</strong> Ostras, vieiras a la parrilla, erizo de mar (uni).</li>
+                            <li><strong>Huevo de Salmón con erizo</strong> (1500¥) solo para probar 1, puede no ser del gusto de todos.</li>
+                        </ul>
+                        <h4>Otras zonas:</h4>
+                        <ul>
+                            <li><strong>Calle Nakamise (Asakusa):</strong> Senbei (galletas de arroz), agemanju (bollos fritos dulces), kibi dango.</li>
+                            <li><strong>Takeshita Street (Harajuku):</strong> Crepes, algodón de azúcar gigante, takoyaki de sabores curiosos.</li>
+                            <li><strong>Ameyoko (Ueno):</strong> Fruta fresca en brochetas, takoyaki, kebabs.</li>
+                            <li><strong>Omoide Yokocho (Shinjuku):</strong> Yakitori y otros platos en pequeños puestos.</li>
+                        </ul>
+                    </div>
+                </details>
+                 <details>
+                    <summary>Osaka ("La Cocina de Japón")</summary>
+                    <div class="details-content">
+                        <h4>Dotonbori (道頓堀) y Namba (難波)</h4>
+                        <p>El epicentro de la cultura "kuidaore" (comer hasta reventar). Imprescindible probar:</p>
+                        <ul>
+                            <li><strong>Takoyaki (たこ焼き):</strong> Bolitas de masa rellenas de pulpo.</li>
+                            <li><strong>Okonomiyaki (お好み焼き):</strong> Especie de "pizza/pancake" salada a la plancha con diversos ingredientes.</li>
+                            <li><strong>Kushikatsu (串カツ):</strong> Brochetas empanadas y fritas de carne, pescado y verduras (típicas de Shinsekai también).</li>
+                        </ul>
+                        <h4>Kuromon Ichiba Market (黒門市場)</h4>
+                        <p>Famoso mercado cubierto con puestos de marisco fresco, carne (incluyendo Kobe), frutas y comida preparada. Los mercados suelen funcionar hasta las 5-6 PM.</p>
+                        <ul>
+                            <li>Recomendable: <strong>Anguila a la parrilla</strong> (1000¥ aprox.). Vieiras, atún.</li>
+                            <li>NO recomendable (según la nota original): Kobe beef burger y brochetas de wagyu (pueden estar sobrevaloradas en este contexto).</li>
+                            <li>Postre recomendado: <strong>Mochi de frutilla</strong> (ichigo daifuku, con la frutilla entera dentro o encima).</li>
+                        </ul>
+                        <h4>Otros en Osaka</h4>
+                         <ul>
+                            <li>Probar <strong>UDON con carne Wagyu</strong> (buscar restaurantes locales en lugar de cadenas).</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary>Kioto</summary>
+                    <div class="details-content">
+                        <h4>Mercado Nishiki (錦市場 - "La Cocina de Kioto")</h4>
+                        <p>Largo y estrecho mercado cubierto con más de cien tiendas y puestos que venden productos locales, encurtidos de Kioto (tsukemono), dulces tradicionales (wagashi), té, sake, marisco y utensilios de cocina. Muchas opciones para probar comida callejera y especialidades locales. No necesariamente barata, pero de calidad.</p>
+                        <ul>
+                            <li>Yuba (nata de soja), tamagoyaki, mochi, senbei.</li>
+                        </ul>
+                        <h4>Gion y Pontocho</h4>
+                        <p>Además de la posibilidad de ver geishas, estas zonas ofrecen restaurantes de alta cocina kaiseki y opciones más informales.</p>
+                    </div>
+                </details>
+                <details>
+                    <summary>Nara</summary>
+                    <div class="details-content">
+                        <ul>
+                            <li><strong>Yomogi Mochi en Nakatanidou:</strong> Mochi verde (hecho con artemisa) relleno de anko (pasta de judías dulces), famoso por cómo lo golpean a gran velocidad.</li>
+                            <li>Snacks y dulces cerca del Parque de Nara.</li>
+                        </ul>
+                    </div>
+                </details>
 
-            <h3 style="margin-top: 25px; font-size: 1.3em; color: var(--h3-color);"><span role="img" aria-label="helado">🍦</span> Postres (General)</h3>
-             <details>
-                <summary>Dulces Tentaciones</summary>
-                <div class="details-content">
-                    <ul>
-                        <li><strong>Mochi de frutilla (Ichigo Daifuku):</strong> Mochi suave relleno de anko y una fresa entera. Popular en mercados y tiendas de dulces.</li>
-                        <li><strong>Matcha:</strong> En todas sus formas (helado, pasteles, lattes, KitKats).</li>
-                        <li><strong>Taiyaki:</strong> Pastel con forma de pez relleno de anko, crema pastelera o chocolate.</li>
-                        <li><strong>Dorayaki:</strong> Dos bizcochos redondos rellenos de anko.</li>
-                        <li><strong>Kakigori:</strong> Hielo raspado con siropes de sabores (especialmente en verano).</li>
-                        <li><strong>Cheesecake japonés:</strong> Más ligero y esponjoso que el occidental. Braian tiene "lugarcitos de cheesecake" que compartirá.</li>
-                    </ul>
-                </div>
-            </details>
+                <h3 style="margin-top: 25px; font-size: 1.3em; color: var(--h3-color); border-left: none; padding-left:0;"><span role="img" aria-label="helado">🍦</span> Postres (General)</h3>
+                 <details>
+                    <summary>Dulces Tentaciones</summary>
+                    <div class="details-content">
+                        <ul>
+                            <li><strong>Mochi de frutilla (Ichigo Daifuku):</strong> Mochi suave relleno de anko y una fresa entera. Popular en mercados y tiendas de dulces.</li>
+                            <li><strong>Matcha:</strong> En todas sus formas (helado, pasteles, lattes, KitKats).</li>
+                            <li><strong>Taiyaki:</strong> Pastel con forma de pez relleno de anko, crema pastelera o chocolate.</li>
+                            <li><strong>Dorayaki:</strong> Dos bizcochos redondos rellenos de anko.</li>
+                            <li><strong>Kakigori:</strong> Hielo raspado con siropes de sabores (especialmente en verano).</li>
+                            <li><strong>Cheesecake japonés:</strong> Más ligero y esponjoso que el occidental. Braian tiene "lugarcitos de cheesecake" que compartirá.</li>
+                        </ul>
+                    </div>
+                </details>
 
-            <h3 style="margin-top: 25px; font-size: 1.3em; color: var(--h3-color);"><span role="img" aria-label="sake">🍶</span> Bebidas (General)</h3>
-            <details>
-                <summary>Para Refrescarse y Brindar</summary>
-                <div class="details-content">
-                    <h4>Alcohol:</h4>
-                    <ul>
-                        <li><strong>Sake (日本酒 - Nihonshu):</strong> Vino de arroz japonés. Hay muchos tipos (dulce/seco, filtrado/sin filtrar, etc.). Probar un set de degustación (利き酒 - kikizake) puede costar entre 600-1000¥. Generalmente, el dulce es más fácil de beber para los no iniciados.</li>
-                        <li><strong>Shochu (焼酎):</strong> Destilado japonés, puede ser de batata, cebada, arroz, etc.</li>
-                        <li><strong>Umeshu (梅酒):</strong> Licor de ciruela japonesa, dulce y fácil de beber.</li>
-                        <li><strong>Cerveza japonesa (ビール - Biiru):</strong> Marcas populares como Asahi, Kirin, Sapporo, Suntory.</li>
-                        <li><strong>Highball (ハイボール):</strong> Whisky japonés con soda, muy popular.</li>
-                    </ul>
-                    <h4>Sin Alcohol:</h4>
-                     <ul>
-                        <li><strong>Té verde (緑茶 - Ryokucha):</strong> Matcha (抹茶 - té en polvo), Sencha (煎茶), Hojicha (ほうじ茶 - tostado), Genmaicha (玄米茶 - con arroz tostado).</li>
-                        <li><strong>Mugicha (麦茶):</strong> Té de cebada tostada, se sirve frío en verano.</li>
-                        <li><strong>Ramune (ラムネ):</strong> Gaseosa japonesa con una canica en la botella.</li>
-                        <li><strong>Calpis (カルピス):</strong> Bebida láctea fermentada, sabor único.</li>
-                        <li>Agua de las máquinas expendedoras (¡hay por todas partes!).</li>
-                    </ul>
-                </div>
-            </details>
-            
-            <hr>
+                <h3 style="margin-top: 25px; font-size: 1.3em; color: var(--h3-color); border-left: none; padding-left:0;"><span role="img" aria-label="sake">🍶</span> Bebidas (General)</h3>
+                <details>
+                    <summary>Para Refrescarse y Brindar</summary>
+                    <div class="details-content">
+                        <h4>Alcohol:</h4>
+                        <ul>
+                            <li><strong>Sake (日本酒 - Nihonshu):</strong> Vino de arroz japonés. Hay muchos tipos (dulce/seco, filtrado/sin filtrar, etc.). Probar un set de degustación (利き酒 - kikizake) puede costar entre 600-1000¥. Generalmente, el dulce es más fácil de beber para los no iniciados.</li>
+                            <li><strong>Shochu (焼酎):</strong> Destilado japonés, puede ser de batata, cebada, arroz, etc.</li>
+                            <li><strong>Umeshu (梅酒):</strong> Licor de ciruela japonesa, dulce y fácil de beber.</li>
+                            <li><strong>Cerveza japonesa (ビール - Biiru):</strong> Marcas populares como Asahi, Kirin, Sapporo, Suntory.</li>
+                            <li><strong>Highball (ハイボール):</strong> Whisky japonés con soda, muy popular.</li>
+                        </ul>
+                        <h4>Sin Alcohol:</h4>
+                         <ul>
+                            <li><strong>Té verde (緑茶 - Ryokucha):</strong> Matcha (抹茶 - té en polvo), Sencha (煎茶), Hojicha (ほうじ茶 - tostado), Genmaicha (玄米茶 - con arroz tostado).</li>
+                            <li><strong>Mugicha (麦茶):</strong> Té de cebada tostada, se sirve frío en verano.</li>
+                            <li><strong>Ramune (ラムネ):</strong> Gaseosa japonesa con una canica en la botella.</li>
+                            <li><strong>Calpis (カルピス):</strong> Bebida láctea fermentada, sabor único.</li>
+                            <li>Agua de las máquinas expendedoras (¡hay por todas partes!).</li>
+                        </ul>
+                    </div>
+                </details>
+            </div> <hr>
             
             <h2 id="locales-comerciales"><span role="img" aria-label="tienda">🏬</span> Locales Comerciales y Souvenirs (General)</h2>
             <p><em>Algunas tiendas tienen ubicaciones específicas en ciudades listadas en sus respectivas secciones (ej. Akihabara, Shinjuku). Las siguientes son cadenas generales o tipos de tiendas muy extendidas.</em></p>
@@ -1163,7 +1212,7 @@
                                 <li><strong>Tokio:</strong> Templo Senso-ji (Asakusa), Santuario Meiji Jingu (Harajuku).</li>
                                 <li><strong>Kioto:</strong> Templo Kiyomizu-dera, Santuario Fushimi Inari-taisha, Kinkaku-ji.</li>
                                 <li><strong>Lista de los Mejores 7 Goshuin de Japón (según una fuente):</strong> <a href="https://goo.gl/maps/f9zzfJEfP2UVpRxe8" target="_blank">Ver en Google Maps</a></li>
-                                <li><strong>Lista de Mejores Goshuinchos de Tokio (según una fuente):</strong> <a href="https://www.google.com/maps/d/viewer?mid=1_examplelist11&usp=sharing" target="_blank">Ver en Google Maps</a></li>
+                                <li><strong>Lista de Mejores Goshuinchos de Tokio (según una fuente):</strong> <a href="https://www.google.com/maps/d/viewer?mid=1G2s9vsoW8F2YEXzF8J0G6V5Xwz8&hl=en_US" target="_blank">Ver en Google Maps</a></li>
                             </ul>
                         </li>
                         <li>Braian tiene dos "lugarcitos pa comprar kimono y ropita" que compartirá.</li>
@@ -1271,15 +1320,13 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const allDetails = document.querySelectorAll('details'); // All details elements
-            const cityDetails = document.querySelectorAll('details.city-section'); // Only city sections
+            const allDetails = document.querySelectorAll('details'); 
+            const cityDetails = document.querySelectorAll('details.city-section'); 
 
-            // Handle accordion for city sections (only one open at a time)
             cityDetails.forEach(targetDetail => {
                 targetDetail.addEventListener('toggle', () => {
                     if (targetDetail.open) {
                         if (window.location.hash && window.location.hash.substring(1) === targetDetail.id) {
-                            // No hacer nada, ya está abierta
                         } else {
                             cityDetails.forEach(detail => {
                                 if (detail !== targetDetail && detail.open) {
@@ -1291,11 +1338,10 @@
                 });
             });
             
-            // Handle main itinerary collapsible H2
-            const itineraryH2Details = document.getElementById('itinerario-details');
-            if (itineraryH2Details) {
-                // Initially close the itinerary if you want it to start collapsed
-                // itineraryH2Details.open = false; 
+            const itineraryDetails = document.getElementById('itinerario-details');
+            if (itineraryDetails) {
+                // Puedes decidir si quieres que el itinerario empiece cerrado o abierto
+                // itineraryDetails.open = false; // Para empezar cerrado
             }
 
 
@@ -1303,7 +1349,15 @@
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href').substring(1);
-                    const targetElement = document.getElementById(targetId) || document.querySelector(`details[id="${targetId}"]`);
+                    let targetElement = document.getElementById(targetId);
+
+                    // Si el ID es de un H2 dentro de un details (como el itinerario),
+                    // el objetivo real para abrir/scroll es el <details> padre.
+                    if (targetId === "itinerario" && document.getElementById("itinerario-details")) {
+                        targetElement = document.getElementById("itinerario-details");
+                    } else if (!targetElement && document.querySelector(`details[id="${targetId}"]`)) {
+                        targetElement = document.querySelector(`details[id="${targetId}"]`);
+                    }
                     
                     closeNav(); 
 
@@ -1312,7 +1366,7 @@
                             if (targetElement.tagName === 'DETAILS') {
                                 if (targetElement.classList.contains('city-section')) {
                                     document.querySelectorAll('details.city-section').forEach(det => {
-                                        if (det.id !== targetId && det.open) det.open = false;
+                                        if (det.id !== targetElement.id && det.open) det.open = false;
                                     });
                                 }
                                 targetElement.open = true; 
@@ -1339,7 +1393,7 @@
                 });
             });
             
-            const sections = document.querySelectorAll('h2[id], details[id]'); // Include all details with an ID
+            const sections = document.querySelectorAll('h2[id], details[id]'); 
             let scrollTimeout;
             window.addEventListener('scroll', () => {
                 clearTimeout(scrollTimeout);
@@ -1355,6 +1409,10 @@
                              if (Math.abs(sectionTop - activationOffset) < minDistance) {
                                 minDistance = Math.abs(sectionTop - activationOffset);
                                 current = section.getAttribute('id');
+                                // Si el ID es del H2 dentro del details del itinerario, usa el ID del details
+                                if (current === "itinerario" && section.parentElement.id === "itinerario-details") {
+                                    current = "itinerario-details";
+                                }
                             }
                         }
                     });
@@ -1366,8 +1424,17 @@
             });
 
             if (window.location.hash) {
-                const hashId = window.location.hash.substring(1);
-                const targetElement = document.getElementById(hashId) || document.querySelector(`details[id="${hashId}"]`);
+                let hashId = window.location.hash.substring(1);
+                let targetElement = document.getElementById(hashId);
+
+                if (hashId === "itinerario" && document.getElementById("itinerario-details")) {
+                    targetElement = document.getElementById("itinerario-details");
+                    hashId = "itinerario-details"; // Actualiza hashId para setActiveLink
+                } else if (!targetElement && document.querySelector(`details[id="${hashId}"]`)) {
+                     targetElement = document.querySelector(`details[id="${hashId}"]`);
+                }
+
+
                 if (targetElement) {
                     setTimeout(() => { 
                         if (targetElement.tagName === 'DETAILS') {
