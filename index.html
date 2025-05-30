@@ -12,8 +12,91 @@
             background-color: #F8F8F8;
             color: #333;
             line-height: 1.8;
-            padding: 10px;
+            /* padding: 10px; Eliminado para que el menú lateral toque el borde */
+            transition: margin-left 0.3s ease; /* Para empujar el contenido */
         }
+
+        /* Estilos del Menú Lateral */
+        .sidebar {
+            height: 100%;
+            width: 0; /* Oculto inicialmente */
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: #fce4ec; /* Mismo fondo que el nav-menu anterior */
+            overflow-x: hidden;
+            transition: width 0.3s ease; /* Transición suave para el ancho */
+            padding-top: 60px; /* Espacio para un posible botón de cierre o contenido superior */
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .sidebar a {
+            padding: 10px 15px 10px 25px;
+            text-decoration: none;
+            font-size: 1.1em; /* Ligeramente más grande para mejores áreas táctiles */
+            color: #e91e63; /* Color del botón */
+            display: block;
+            transition: 0.3s;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        .sidebar a:hover {
+            background-color: #e91e63; /* Color del botón */
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 10px; /* Ajustado para mejor colocación */
+            font-size: 36px;
+            margin-left: 50px;
+            color: #e91e63;
+            text-decoration: none;
+        }
+        .sidebar .closebtn:hover {
+            color: #d81b60;
+            background-color: transparent; /* Sobrescribe el hover general */
+            transform: none;
+        }
+
+
+        .menu-toggle-btn {
+            font-size: 24px; /* Tamaño ajustado */
+            cursor: pointer;
+            background-color: #BC002D;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 0 5px 5px 0; /* Redondeado en un lado */
+            position: fixed;
+            top: 15px;
+            left: 0; /* Comienza en el borde */
+            z-index: 1001; /* Por encima del menú lateral cuando está cerrado, por debajo cuando el menú se abre sobre él*/
+            transition: left 0.3s ease; /* Para moverse con el contenido si el contenido se empuja */
+        }
+        
+        /* Cuando el menú lateral está abierto, mueve el botón de toggle con el ancho del menú */
+        body.sidebar-open .menu-toggle-btn {
+            /* Opcional: ocultar o mover el botón cuando el menú lateral está abierto */
+            /* left: 250px; */ /* Ejemplo si quieres que se pegue al borde del menú lateral */
+        }
+
+
+        .main-content-area { /* Nuevo contenedor para el contenido que podría ser empujado */
+            transition: margin-left 0.3s ease;
+            padding: 10px; /* Padding original del body */
+        }
+        
+        /* Empuja el contenido principal a la derecha cuando el menú lateral está abierto */
+        body.sidebar-open .main-content-area {
+            margin-left: 250px; /* Mismo ancho que el menú lateral */
+        }
+
+
         .container {
             max-width: 900px;
             margin: 20px auto;
@@ -40,7 +123,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            cursor: pointer;
+            /* cursor: pointer; Eliminado ya que era para una funcionalidad diferente */
         }
         h3 {
             color: #4A148C;
@@ -63,9 +146,8 @@
         li {
             margin-bottom: 6px;
         }
-        /* La etiqueta strong ya es bold por defecto, pero podemos darle un color si queremos destacarla más */
         strong {
-            color: #333; /* Color de texto normal o ligeramente más oscuro */
+            color: #333;
             font-weight: bold;
         }
         .note {
@@ -83,12 +165,12 @@
             font-weight: bold;
             color: #1976D2;
         }
-        a {
+        a { /* Estilos generales de enlaces, los enlaces del menú lateral los sobrescribirán */
             color: #0D47A1;
             text-decoration: none;
             transition: color 0.3s ease;
         }
-        a:hover {
+        a:hover { /* Hover general de enlaces */
             color: #FF5252;
             text-decoration: underline;
         }
@@ -118,36 +200,8 @@
             font-size: 0.9em;
         }
 
-        /* Estilos para el menú de navegación */
-        .nav-menu {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 30px;
-            padding: 15px;
-            background-color: #fce4ec;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .nav-menu a.button {
-            display: block;
-            padding: 10px 15px;
-            background-color: #e91e63;
-            color: white;
-            text-align: center;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            white-space: nowrap;
-        }
-        .nav-menu a.button:hover {
-            background-color: #d81b60;
-            transform: translateY(-2px);
-        }
+        /* Estilos de .nav-menu y .nav-menu a.button eliminados ya que son reemplazados por el menú lateral */
 
-        /* Estilos para Acordeones anidados (details/summary) - Subsecciones */
         details {
             background-color: #fefefe;
             border: 1px solid #e0e0e0;
@@ -191,7 +245,6 @@
             background-color: #ffffff;
         }
 
-        /* Estilos específicos para los Acordeones de CADA CIUDAD */
         .city-section {
             background-color: #ffffff;
             border: 2px solid #BC002D;
@@ -222,509 +275,520 @@
             padding: 20px;
         }
 
-        /* Media Queries for Mobile Responsiveness */
+        @media (max-width: 768px) { /* Punto de interrupción ajustado para el comportamiento del menú lateral */
+             body.sidebar-open .main-content-area {
+                margin-left: 0; /* El menú lateral se superpone en pantallas más pequeñas */
+            }
+            .sidebar {
+                 /* En pantallas más pequeñas, asegúrate de que el menú lateral ocupe todo el ancho si es necesario,
+                 o ajusta el ancho si 250px es demasiado */
+            }
+            .menu-toggle-btn {
+                /* Potencialmente ajusta el tamaño o la posición para pantallas más pequeñas */
+            }
+        }
+
+
         @media (max-width: 600px) {
-            body {
+            /* body { padding: 5px; } */ /* Mantén el padding en main-content-area */
+            .main-content-area {
                 padding: 5px;
             }
             .container {
                 margin: 10px auto;
                 padding: 15px;
             }
-            h1 {
-                font-size: 1.8em;
-            }
-            h2 {
-                font-size: 1.4em;
-            }
-            h3 {
-                font-size: 1.1em;
-            }
-            h4 {
-                font-size: 1em;
-            }
-            ul, ol {
-                padding-left: 15px;
-            }
-            .nav-menu a.button {
-                padding: 8px 12px;
-                font-size: 0.9em;
-            }
-            summary {
-                padding: 12px;
-                font-size: 0.95em;
-            }
-            .details-content {
-                padding: 12px;
-            }
-            .city-section summary {
-                font-size: 1.4em;
-                padding: 15px 20px;
-            }
-            .city-content {
-                padding: 15px;
-            }
+            h1 { font-size: 1.8em; }
+            h2 { font-size: 1.4em; }
+            h3 { font-size: 1.1em; }
+            h4 { font-size: 1em; }
+            ul, ol { padding-left: 15px; }
+            /* .nav-menu a.button eliminado */
+            summary { padding: 12px; font-size: 0.95em; }
+            .details-content { padding: 12px; }
+            .city-section summary { font-size: 1.4em; padding: 15px 20px; }
+            .city-content { padding: 15px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🌸 Nuestro Viaje a Japón: Mabelasaki Asian Trip 🏯</h1>
-        <p style="text-align: center; font-style: italic; color: #555;">¡Toda la información importante de nuestro viaje a Japón organizada para tenerla a mano!</p>
+    <nav id="sidebarMenu" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a href="#resumen" class="sidebar-link">Resumen</a>
+        <a href="#transporte-general" class="sidebar-link">Transporte</a>
+        <a href="#tokio-city" class="sidebar-link">Tokio</a>
+        <a href="#osaka-city" class="sidebar-link">Osaka</a>
+        <a href="#kioto-city" class="sidebar-link">Kioto</a>
+        <a href="#nara-city" class="sidebar-link">Nara</a>
+        <a href="#nikko-hakone" class="sidebar-link">Nikko/Hakone</a>
+        <a href="#comida-general" class="sidebar-link">Comida</a>
+        <a href="#compras" class="sidebar-link">Compras</a>
+        <a href="#ando" class="sidebar-link">Ando</a>
+        <a href="#curiosidades" class="sidebar-link">Curiosidades</a>
+    </nav>
 
-        <hr>
+    <button class="menu-toggle-btn" onclick="openNav()">&#9776;</button>
 
-        <div class="nav-menu">
-            <a href="#resumen" class="button">Resumen</a>
-            <a href="#transporte-general" class="button">Transporte</a>
-            <a href="#tokio-city" class="button">Tokio</a>
-            <a href="#osaka-city" class="button">Osaka</a>
-            <a href="#kioto-city" class="button">Kioto</a>
-            <a href="#nara-city" class="button">Nara</a>
-            <a href="#nikko-hakone" class="button">Nikko/Hakone</a>
-            <a href="#comida-general" class="button">Comida</a>
-            <a href="#compras" class="button">Compras</a>
-            <a href="#ando" class="button">Ando</a>
-            <a href="#curiosidades" class="button">Curiosidades</a>
-        </div>
+    <div id="mainArea" class="main-content-area">
+        <div class="container">
+            <h1>🌸 Nuestro Viaje a Japón: Mabelasaki Asian Trip 🏯</h1>
+            <p style="text-align: center; font-style: italic; color: #555;">¡Toda la información importante de nuestro viaje a Japón organizada para tenerla a mano!</p>
 
-        <hr>
+            <hr> 
+            
+            <h2 id="resumen"><span role="img" aria-label="cohete">🚀</span> Resumen del Viaje</h2>
+            <ul>
+                <li><strong>Destino:</strong> Japón (Tokio, Osaka, Kioto, Nara, Nikko, Hakone, Universal Studios, Expo 2025)</li>
+                <li><strong>Viajeros:</strong> Nico y Braian 🇦🇷</li>
+                <li><strong>Fechas:</strong> Del <span class="highlight">12 de Junio al 23 de Junio de 2025</span>.</li>
+                <li><strong>Tipo de Viaje:</strong> Cultural, Exploración, Tecnología, Aventura, Gastronomía.</li>
+            </ul>
 
-        <h2 id="resumen"><span role="img" aria-label="cohete">🚀</span> Resumen del Viaje</h2>
-        <ul>
-            <li><strong>Destino:</strong> Japón (Tokio, Osaka, Kioto, Nara, Nikko, Hakone, Universal Studios, Expo 2025)</li>
-            <li><strong>Viajeros:</strong> Nico y Braian 🇦🇷</li>
-            <li><strong>Fechas:</strong> Del <span class="highlight">12 de Junio al 23 de Junio de 2025</span>.</li>
-            <li><strong>Tipo de Viaje:</strong> Cultural, Exploración, Tecnología, Aventura, Gastronomía.</li>
-        </ul>
+            <h3><span role="img" aria-label="mapa">🗺️</span> Mapas y Ubicaciones Clave</h3>
+            <ul>
+                <li>Braian se encargará de armar un <strong>mapita</strong> de los lugares a visitar, con íconos de sushi 🍣 para restaurantes.</li>
+                <li><strong>Mapa MUST de Japón (no editable):</strong> <a href="https://maps.app.goo.gl/ssb1p9BwaFyydBy16?g_st=iw" target="_blank">Mapa de Hideto Nakamura</a> (Nico recomienda agregarlo).</li>
+            </ul>
 
-        <h3><span role="img" aria-label="mapa">🗺️</span> Mapas y Ubicaciones Clave</h3>
-        <ul>
-            <li>Braian se encargará de armar un <strong>mapita</strong> de los lugares a visitar, con íconos de sushi 🍣 para restaurantes.</li>
-            <li><strong>Mapa MUST de Japón (no editable):</strong> <a href="https://maps.app.goo.gl/ssb1p9BwaFyydBy16?g_st=iw" target="_blank">Mapa de Hideto Nakamura</a> (Nico recomienda agregarlo).</li>
-        </ul>
-
-        <h3><span role="img" aria-label="cambio de divisa">💸</span> Cambio de Divisas y Pagos</h3>
-        <details>
-            <summary>Detalles sobre Dinero y Pagos</summary>
-            <div class="details-content">
-                <ul>
-                    <li>Hay muchos lugares en Japón donde **todo es en efectivo (cash)** 💴, sobre todo en los mercaditos.</li>
-                    <li>El mejor cambio es en aeropuerto, después del control, a la izquierda o derecha. Es conveniente llevar **dólares** 💵.</li>
-                    <li>**Apple Pay** y **PayPal** son métodos válidos de pago en muchos comercios.</li>
-                    <li>En gran cantidad de negocios se te descuenta el **10% de impuestos** si presentas el pasaporte 🛂.</li>
-                </ul>
-            </div>
-        </details>
-
-        <hr>
-
-        <h2 id="transporte-general"><span role="img" aria-label="tren bala">🚅</span> Transporte General</h2>
-        <details>
-            <summary>Consejos y Opciones de Transporte</summary>
-            <div class="details-content">
-                <ul>
-                    <li>**JR Pass:** No comprar el <strong>JR Pass</strong> para el tren bala porque no conviene. Es mejor sacar tickets online y escanear el QR en las máquinas para imprimir.</li>
-                    <li><strong>Tren Bala (Shinkansen):</strong>
+            <h3><span role="img" aria-label="cambio de divisa">💸</span> Cambio de Divisas y Pagos</h3>
+            <details>
+                <summary>Detalles sobre Dinero y Pagos</summary>
+                <div class="details-content">
                     <ul>
-                        <li>De Tokio a Shin-Osaka cuesta 90€ ida solo por persona.</li>
-                        <li>Se recomienda viajar sentado a la **derecha** para ver el **Monte Fuji** 🗻.</li>
-                        <li><strong>¡IMPORTANTE!</strong> Los trenes bala (**JR - Japan Railway**) se tienen que reservar con tiempo porque se llenan rápido.</li>
-                    </ul>
-                    </li>
-                    <li><strong>Tarjetas de Transporte Público (dentro de las ciudades):</strong>
-                    <ul>
-                        <li><strong>MySuica</strong> Tarjeta de transporte público.</li>
-                        <li><strong>Welcome SUICA</strong> o **PASMO PASSPORT:** Se saca física en el aeropuerto y no tiene comisión. Tenes que poner 1500Y y si te sobra lo podes gastar en **7-Eleven** y demás tiendas.</li>
-                        <li><strong>Cuidado</strong> con las tarjetas de varios días (24-48-72) y distinguir la diferencia entre **Metro** y **JR**.</li>
-                        <li>La **JR** lleva a todos los lugares emblemáticos de Tokio.</li>
-                    </ul>
-                    </li>
-                    <li>**LUUP app:** Patinetes y bicis eléctricos (no conviene tanto y hay que tener cuidado a los accidentes porque se conduce al revés).</li>
-                </ul>
-            </div>
-        </details>
-
-        <hr>
-
-        <details class="city-section" id="tokio-city">
-            <summary><span role="img" aria-label="ciudad de tokio">🗼</span> TOKIO</summary>
-            <div class="city-content">
-                <h3><span role="img" aria-label="cama">🛌</span> Hospedaje en Tokio</h3>
-                <h4>Hospedaje de Ida (12/06 al 16/06 - 4 noches)</h4>
-                <ul>
-                    <li><strong>Opciones consideradas:</strong>
-                        <ul>
-                            <li><a href="https://booking.com/mywishlist.html?wl=CSbSKRu3dPlVCfxjXfoxatePooP" target="_blank">Selección Booking de Nico</a></li>
-                            <li><a href="https://www.airbnb.es/wishlists/invite/9caf2cf9-21d2-4f34-b984-6e6de4002d22?s=67&unique_share_id=dbd226d9-e112-41dc-947c-be6d1e0d0be2" target="_blank">Selección Airbnb de Nico</a></li>
-                        </ul>
-                    </li>
-                    <li><strong>Hospedajes Finalistas:</strong>
-                        <ul>
-                            <li>**Opción A (Booking):** <a href="https://www.booking.com/Share-Jfh6WnC" target="_blank"><strong>秋叶原嘉陽ビル (Akihabara Kayo Building)</strong></a>. Ubicación en <strong>Akihabara</strong>.</li>
-                            <li><strong>Opción B (Airbnb):</strong> <a href="https://www.airbnb.com/l/cpSg9HJL" target="_blank">Airbnb similar</a>. Ubicación en **Chuo Ginza** (considerado "aburrido" de noche).</li>
-                        </ul>
-                    </li>
-                    <li><strong>Decisión:</strong> Se eligió el de **Booking en Akihabara** ya que está bien conectado y no es "muerto" de noche, aunque habrá que moverse.</li>
-                </ul>
-                <h4>Hospedaje de Vuelta (21/06 al 23/06 - 2 noches)</h4>
-                <ul>
-                    <li><strong>Opción Elegida:</strong> **9h nine hours Akasaka Capsule Hotel** con estudio del sueño.</li>
-                    <li><strong>Costo:</strong> 358,47€ para los dos las dos noches (más caro por ser finde). Esto da 179€ por noche, o 90€ cada uno las dos noches si se agrega desayuno por 4€ más.</li>
-                    <li><strong>Decisión:</strong> ¡Reservado el <span class="highlight">**9h nine hours Akasaka Capsule Hotel**</span>!</li>
-                    <li><strong>Costo Final pagado:</strong> <span class="highlight">176.39€</span> los dos.</li>
-                </ul>
-
-                <h3><span role="img" aria-label="lugares de interés">📍</span> Lugares para Visitar en Tokio</h3>
-                <details>
-                    <summary>Ver lista completa de Barrios y Puntos de Interés</summary>
-                    <div class="details-content">
-                        <h4>Barrios recomendados y puntos de interés:</h4>
-                        <ol>
-                            <li>**Shibuya:** **Shibuya Crossing**, **Shibuya Scramble Square**, **ShibuyaSky**, **Shibuya 109**, **Shibuya depachika** (paseo de compras subterráneo), **Miyashita Park**, **ShibuyaStation Fukutoshin Line** (obra de Ando).</li>
-                            <li>**Harajuku:** **Takeshita Street**, **Omotesando**, **Omotesando Hills** (obra de Ando), **Santuario Meiji Jingu**.</li>
-                            <li>**Shinjuku:** **Edificio del Gobierno Metropolitano de Tokyo**, **Kabukicho** (el paseo nocturno es un poco más heavy), Terminal de Autobuses, Terminal de trenes, **Tokyo Kabukicho Tower**, **Omoide Yokocho** (callejón de bares), **Shinjuku depachika** (paseo de compras subterráneo). **¡Barrio muy guay!** Ideal para salir de fiesta, compras y **Yakimiku** (carne asada). Se recomienda hospedarse del lado este. Spots: **Kabukicho Tower** (con barcitos y lugares de juegos para mabelas), **Omoide Yokodo** (callejón con bares y brochetas), **Golden Gai** (microbares).</li>
-                            <li>**Asakusa:** Calle **Nakamise**, **Templo Sensoji**, Centro de información turística y cultural de Asakusa, Hotel cápsula Asakusa, Calle **Kappabashi** (bazares), **Skytree**, **Solamachi**.</li>
-                            <li>**Ueno:** **Ameyoko**, **Parque Ueno**, **Museo Metropolitano de Arte de Tokyo**, **Yanesen** (barrio antiguo), Zoo. (Tiene pinta media de once). Está **HIPER conectado** (pasa el tren del aeropuerto).</li>
-                            <li>**Ginza:** **Kabukiza**, barrio comercial de grandes marcas europeas **Ginza Yonchome**, **Mercado de Tsukiji**.</li>
-                            <li>**Marunouchi:** **Estación Central de Tokyo**, **Palacio Imperial**, **TokyoRamen Street**, **Foro Internacional de Tokyo**, **Edificio Marunouchi**.</li>
-                            <li>**Chofu:** **Tokyo Art Museum** (obra de Ando).</li>
-                            <li>**Roppongi/Akasaka:** **Roppongi Hills**, **Azabudai Hills**, **Midtown Garden** (obra de Ando 21 21), **Centro Nacional de Arte de Tokyo**, **Museo de Arte Suntory**, **Museo de Arte Mori**. Roppongi es muy "calletano" y "american style", no hay mucho que hacer.</li>
-                            <li>**Ikebukuro:** **Teatro Metropolitano de Tokyo**, **Sunshine City**, **Anime Tokyo Station**, **Jiyugakuen Miyonichikan**.</li>
-                            <li>**Odaiba:** **Parque Odaiba**, **Fuji TV**, <span class="highlight">**Team Lab Planets Tokyo**</span> (¡IMPERDIBLE! ✨), **Mercado de Toyosu**, **Ariake Garden**. **NO hospedarse aquí.**</li>
-                        </ol>
-                    </div>
-                </details>
-                <h4>Lugares destacados para visitar:</h4>
-                <ul>
-                    <li>**TeamLab Planets Digital Art Museum:** ¡Sueño de Nico, por su adicción a la tecnología, ciencia ficción y arquitectura!</li>
-                    <li>**Skytree:** Torre panorámica, muy buena de noche.</li>
-                    <li>**Palacio Imperial de Tokio.**</li>
-                    <li>**Recorrido guiado en Karting en Shibuya:** No se acuerdan la agencia pero hay que buscarlo, es un flash de noche hacerlo mejor.</li>
-                    <li>**Monte Fuji y Lago Kawaguchi:** Ahí está también el **Santuario Arakura Sengen** y la **Pagoda Chureito Oshino Kakkai** (¡Esta es un flash! 📸).</li>
-                </ul>
-
-                <h3><span role="img" aria-label="noche">🌃</span> Noche en Tokio</h3>
-                <details>
-                    <summary>Planes nocturnos en Tokio</summary>
-                    <div class="details-content">
-                        <ul>
-                            <li><strong>Los Barrios</strong> para esto son **Roppongi**, **Shibuya** y **Shinjuko**.</li>
-                            <li><strong>Lugares a visitar de noche</strong> son mejores que de día: **Torre de TOKYO**, **Puente del Arcoíris**, **Harajuku**.</li>
-                            <li><strong>Puesta de Sol impresionante:</strong> **Parque Daiba**.</li>
-                            <li>Para **compras de noche** cosas exclusivas, vintage, raras, siempre hay cosas accesibles, increíbles de diseño: **Calle del Gato** y la **Avenida Omotesando** (estas son perlitas locales no para turistas). El barrio de **Harajuku** también.</li>
-                            <li>**Club Nocturno Exclusivo (Genius en Ginza):** Es el más top, se entra solo con membresía, pero si quieren ir, preguntar en la puerta por **Sensei Chiu Wai** (jefe de coordinación de Seguridad, uno de los Sensei top de kung fu japonés). Fue maestro de kung fu de Alex Tien-long y le tiene que decir que va de parte de Alex Tien-long. Sabrá enseguida quién es y lo dejará pasar. (¡Advertencia: "se vuelve de novio con una geisha y la actual la deja en casa"! 😅)</li>
-                        </ul>
-                    </div>
-                </details>
-            </div>
-        </details>
-
-        <hr>
-
-        <details class="city-section" id="osaka-city">
-            <summary><span role="img" aria-label="pulpo">🐙</span> OSAKA</summary>
-            <div class="city-content">
-                <h3><span role="img" aria-label="tren bala">🚅</span> Transporte a Osaka</h3>
-                <div class="note">
-                    <strong>¡Tickets de Shinkansen Tokio-Osaka comprados!</strong> ✅
-                    <ul>
-                        <li><strong>Fecha de Salida:</strong> <span class="highlight">Jun 16, 2025</span></li>
-                        <li><strong>Ruta:</strong> **Tokyo** (09:00) --> **NOZOMI 223** --> **Shin-Osaka** (11:30)</li>
-                        <li><strong>Asientos:</strong> Car.6 Seat.8-D y Car.6 Seat.8-E (¡Mirando al Fuji! 🤩)</li>
-                        <li><strong>Costo Total (2 personas):</strong> <span class="highlight">28,640 Yen</span></li>
-                        <li><strong>Guía para QR-Ticket:</strong> <a href="https://smart-ex.jp/en/entraining/qr/" target="_blank">smart-ex.jp/en/entraining/qr/</a></li>
-                        <li>Se compró solo la ida, ya que la vuelta dependerá de las actividades finales en Osaka/Kioto/Nara.</li>
+                        <li>Hay muchos lugares en Japón donde **todo es en efectivo (cash)** 💴, sobre todo en los mercaditos.</li>
+                        <li>El mejor cambio es en aeropuerto, después del control, a la izquierda o derecha. Es conveniente llevar **dólares** 💵.</li>
+                        <li>**Apple Pay** y **PayPal** son métodos válidos de pago en muchos comercios.</li>
+                        <li>En gran cantidad de negocios se te descuenta el **10% de impuestos** si presentas el pasaporte 🛂.</li>
                     </ul>
                 </div>
-                
-                <h3><span role="img" aria-label="cama">🛌</span> Hospedaje en Osaka</h3>
-                <ul>
-                    <li><strong>Fechas:</strong> <span class="highlight">16/06 al 21/06</span> (5 noches)</li>
-                    <li><strong>Opciones de Airbnb Consideradas:</strong>
-                        <ul>
-                            <li><a href="https://www.airbnb.com/rooms/1343940212983035218?adults=2&check_in=2025-06-16&check_out=2025-06-21&search_mode=regular_search&source_impression_id=p3_1745767131_P3SzGasAuVgZZHCG&previous_page_section_name=1000&federated_search_id=5fac5545-d11e-428c-b0a9-e42fdea9e115" target="_blank">Opción 1 de Braian</a></li>
-                            <li><a href="https://www.airbnb.com/l/wlg55yJ4" target="_blank">Opción 2 de Nico</a></li>
-                        </ul>
-                    </li>
-                    <li><strong>Recomendación de Braian:</strong> Quedarse en **Osaka** y no en **Kioto**, e ir y volver a los lugares desde allí.</li>
-                </ul>
+            </details>
 
-                <h3><span role="img" aria-label="lugares de interés">📍</span> Lugares para Visitar en Osaka</h3>
-                <details>
-                    <summary>Atracciones en Osaka</summary>
-                    <div class="details-content">
-                        <ul>
-                            <li>Se disfruta más de noche. **Kobe** es muy similar a Osaka.</li>
-                            <li>**Namba** y **Dotonbori:** son dos lugares para disfrutar de la noche, luces de neón, **Izakayas** y karaoke.</li>
-                            <li>**Tempozan Giant Ferris Wheel:** Gran noria con vistas al puerto y al atardecer.</li>
-                            <li>**Shinsekai & Torre Tsutenkaku:** Parecido a **Dotonbori**. Lugar de comida barata (**Kushikatsu**). Ideal para vivir **OSAKA Retro**. **¡Cierra a las 8 pm!** ⏰ Cuidado.</li>
-                        </ul>
-                    </div>
-                </details>
-                <h4>Excursiones y Parques Temáticos desde Osaka:</h4>
-                <details>
-                    <summary>Universal Studios Japan y Expo 2025</summary>
-                    <div class="details-content">
-                        <ul>
-                            <li>**Universal Studios Japan:** Entrada cuesta aproximadamente <span class="highlight"><strong>150 USD con Fast Pass</strong></span> (depende de las atracciones deseadas). La idea del **Fast Pass** es para no hacer colas interminables. Se puede sacar cuando estén allá.</li>
-                            <li>**Expo Universal 2025 en Osaka:**
-                                <ul>
-                                    <li>**Página Oficial:** <a href="https://www.expo2025.or.jp/en/" target="_blank">expo2025.or.jp/en/</a></li>
-                                    <li>**Mapa General:** <a href="https://www.expo2025.or.jp/wp/wp-content/themes/expo2025orjp_2022/assets/pdf/expo-map-index/map/map01_A4_color_en.pdf" target="_blank">PDF del mapa</a></li>
-                                    <li>**Guía de Alan x el Mundo:** <a href="https://alanxelmundo.com/guia-para-visitar-la-expo-universal-2025-en-osaka/" target="_blank">Guía completa</a>. Recomienda reservar los pabellones con anticipación.</li>
-                                    <li>**Video de Alan x el Mundo:** <a href="https://www.youtube.com/watch?v=UMkNj8YRY70&ab_channel=alanxelmundo" target="_blank">Video de la Expo</a> (¡Nico está muy emocionado por la tecnología, ciencia ficción y arquitectura! 🤩).</li>
-                                    <li>**Costo del Ticket de Entrada:** <span class="highlight"><strong>46 euros</strong></span>.</li>
-                                    <li>**Tamaño:** Es <span class="highlight">GIGANTE</span>.</li>
-                                    <li>**Importante:** Si llueve, no conviene ir (según Alan x el Mundo). ☔</li>
-                                    <li>**TOP 10 de Pabellones (según Alex x Elmundo):** **Países Bajos**, **Kuwait**, **The Land of Nomo**, **Japón**, **EEUU**, **Paso a Natureboy**, **Null2**, **Francia**, **Future of Life**.</li>
-                                    <li>Se pueden comprar **pasaportes para sellitos** de los pabellones (1500Y-2000Y) 🛂.</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </details>
+            <hr>
 
-                <h3><span role="img" aria-label="comida">🍽️</span> Comida y Bebida en Osaka</h3>
-                <details>
-                    <summary>Delicias culinarias en Osaka</summary>
-                    <div class="details-content">
+            <h2 id="transporte-general"><span role="img" aria-label="tren bala">🚅</span> Transporte General</h2>
+            <details>
+                <summary>Consejos y Opciones de Transporte</summary>
+                <div class="details-content">
+                    <ul>
+                        <li>**JR Pass:** No comprar el <strong>JR Pass</strong> para el tren bala porque no conviene. Es mejor sacar tickets online y escanear el QR en las máquinas para imprimir.</li>
+                        <li><strong>Tren Bala (Shinkansen):</strong>
                         <ul>
-                            <li>**Dotonbori:** el corazón vibrante de la ciudad. Cosas a probar: **Takoyaki** y **Okonomiyaki**.</li>
-                            <li>**Kuromon Ichiba Market:** Mercado callejero más famoso de Osaka donde hay **street food** (ideal foodies). Los mercados funcionan hasta las 5/6 pm, no de noche ‼️
-                                <ul>
-                                    <li>Recomendable: **Anguila** (1000¥).</li>
-                                    <li>NO recomendable: **Kobe beef burger** y las brochetas de **wagyu** (demasiado sobrevaloradas).</li>
-                                    <li>Postres recomendado: **Mochi de frutilla** (con frutilla encima).</li>
-                                </ul>
-                            </li>
-                            <li>Probar **UDON con carne Wagyu** (tratar de evitar las cadenas).</li>
+                            <li>De Tokio a Shin-Osaka cuesta 90€ ida solo por persona.</li>
+                            <li>Se recomienda viajar sentado a la **derecha** para ver el **Monte Fuji** 🗻.</li>
+                            <li><strong>¡IMPORTANTE!</strong> Los trenes bala (**JR - Japan Railway**) se tienen que reservar con tiempo porque se llenan rápido.</li>
                         </ul>
-                    </div>
-                </details>
-            </div>
-        </details>
-
-        <hr>
-
-        <details class="city-section" id="kioto-city">
-            <summary><span role="img" aria-label="templo">⛩️</span> KIOTO</summary>
-            <div class="city-content">
-                <h3><span role="img" aria-label="lugares de interés">📍</span> Lugares para Visitar en Kioto</h3>
-                <details>
-                    <summary>Atracciones en Kioto</summary>
-                    <div class="details-content">
+                        </li>
+                        <li><strong>Tarjetas de Transporte Público (dentro de las ciudades):</strong>
                         <ul>
-                            <li>La ciudad más turística de Japón.</li>
-                            <li>**Fushimi Inari:** el templo de los **1000 Toris** (para sacarse fotos vacíos hay que llegar al amanecer por lo que sino está lleno de gente). **LLEGAR A LA ÚLTIMA VISTA DE LA CIUDAD.** No seguir subiendo ‼️ La comida callejera de ahí no es de calidad.</li>
-                            <li>**Kiyomizu-dera (Kuomyzudera):** Templo budista más famoso de Kioto (500¥ - Accesible). Las mejores vistas.</li>
-                            <li>**Kimono Forest** (noche).</li>
-                            <li>**Parque de los Monos:** 40 minutos en subida. Un espacio lleno de monos 🐒.</li>
-                            <li>**El bosque de Bambú** (Arashiyama) está abierto siempre pero los locales a las 5/6 empieza a cerrar (11 a 20hs horario comercial, y las áreas naturales más o menos de las 9am a 17). En una hora se puede recorrer todo el bosque.</li>
-                            <li>**Otros templos importantes:** **Santuario Agustín Inari Taisha**, **Templo Kitomizudera**, **Templo Hokokuji**.</li>
+                            <li><strong>MySuica</strong> Tarjeta de transporte público.</li>
+                            <li><strong>Welcome SUICA</strong> o **PASMO PASSPORT:** Se saca física en el aeropuerto y no tiene comisión. Tenes que poner 1500Y y si te sobra lo podes gastar en **7-Eleven** y demás tiendas.</li>
+                            <li><strong>Cuidado</strong> con las tarjetas de varios días (24-48-72) y distinguir la diferencia entre **Metro** y **JR**.</li>
+                            <li>La **JR** lleva a todos los lugares emblemáticos de Tokio.</li>
                         </ul>
-                    </div>
-                </details>
+                        </li>
+                        <li>**LUUP app:** Patinetes y bicis eléctricos (no conviene tanto y hay que tener cuidado a los accidentes porque se conduce al revés).</li>
+                    </ul>
+                </div>
+            </details>
 
-                <h3><span role="img" aria-label="comida">🍽️</span> Comida en Kioto</h3>
-                <details>
-                    <summary>Qué comer en Kioto</summary>
-                    <div class="details-content">
-                        <ul>
-                            <li>**Mercado Nishiki:** Mercado recomendado para comer comida callejera. Muchas opciones y muy rico (no necesariamente barata la comida callejera).</li>
-                        </ul>
-                    </div>
-                </details>
-            </div>
-        </details>
+            <hr>
 
-        <hr>
+            <details class="city-section" id="tokio-city">
+                <summary><span role="img" aria-label="ciudad de tokio">🗼</span> TOKIO</summary>
+                <div class="city-content">
+                    <h3><span role="img" aria-label="cama">🛌</span> Hospedaje en Tokio</h3>
+                    <h4>Hospedaje de Ida (12/06 al 16/06 - 4 noches)</h4>
+                    <ul>
+                        <li><strong>Opciones consideradas:</strong>
+                            <ul>
+                                <li><a href="https://booking.com/mywishlist.html?wl=CSbSKRu3dPlVCfxjXfoxatePooP" target="_blank">Selección Booking de Nico</a></li>
+                                <li><a href="https://www.airbnb.es/wishlists/invite/9caf2cf9-21d2-4f34-b984-6e6de4002d22?s=67&unique_share_id=dbd226d9-e112-41dc-947c-be6d1e0d0be2" target="_blank">Selección Airbnb de Nico</a></li>
+                            </ul>
+                        </li>
+                        <li><strong>Hospedajes Finalistas:</strong>
+                            <ul>
+                                <li><strong>Opción A (Booking):</strong> <a href="https://www.booking.com/Share-Jfh6WnC" target="_blank"><strong>秋叶原嘉陽ビル (Akihabara Kayo Building)</strong></a>. Ubicación en <strong>Akihabara</strong>.</li>
+                                <li><strong>Opción B (Airbnb):</strong> <a href="https://www.airbnb.com/l/cpSg9HJL" target="_blank">Airbnb similar</a>. Ubicación en **Chuo Ginza** (considerado "aburrido" de noche).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Decisión:</strong> Se eligió el de **Booking en Akihabara** ya que está bien conectado y no es "muerto" de noche, aunque habrá que moverse.</li>
+                    </ul>
+                    <h4>Hospedaje de Vuelta (21/06 al 23/06 - 2 noches)</h4>
+                    <ul>
+                        <li><strong>Opción Elegida:</strong> **9h nine hours Akasaka Capsule Hotel** con estudio del sueño.</li>
+                        <li><strong>Costo:</strong> 358,47€ para los dos las dos noches (más caro por ser finde). Esto da 179€ por noche, o 90€ cada uno las dos noches si se agrega desayuno por 4€ más.</li>
+                        <li><strong>Decisión:</strong> ¡Reservado el <span class="highlight">**9h nine hours Akasaka Capsule Hotel**</span>!</li>
+                        <li><strong>Costo Final pagado:</strong> <span class="highlight">176.39€</span> los dos.</li>
+                    </ul>
 
-        <details class="city-section" id="nara-city">
-            <summary><span role="img" aria-label="ciervo">🦌</span> NARA</summary>
-            <div class="city-content">
-                <h3><span role="img" aria-label="lugares de interés">📍</span> Lugares para Visitar en Nara</h3>
-                <details>
-                    <summary>Atracciones en Nara</summary>
-                    <div class="details-content">
+                    <h3><span role="img" aria-label="lugares de interés">📍</span> Lugares para Visitar en Tokio</h3>
+                    <details>
+                        <summary>Ver lista completa de Barrios y Puntos de Interés</summary>
+                        <div class="details-content">
+                            <h4>Barrios recomendados y puntos de interés:</h4>
+                            <ol>
+                                <li>**Shibuya:** <a href="https://www.google.com/maps/place/Shibuya+Crossing/@35.6591781,139.7007267,17z/data=!3m1!4b1!4m6!3m5!1s0x60188b5608d1f2e9:0xc3b5f1e00a94b595!8m2!3d35.6591781!4d35.6591781!16s%2Fg%2F12275y93?entry=ttu" target="_blank"><strong>Shibuya Crossing</strong></a>, **Shibuya Scramble Square**, **ShibuyaSky**, **Shibuya 109**, **Shibuya depachika** (paseo de compras subterráneo), **Miyashita Park**, **ShibuyaStation Fukutoshin Line** (obra de Ando).</li>
+                                <li>**Harajuku:** **Takeshita Street**, **Omotesando**, **Omotesando Hills** (obra de Ando), **Santuario Meiji Jingu**.</li>
+                                <li>**Shinjuku:** **Edificio del Gobierno Metropolitano de Tokyo**, **Kabukicho** (el paseo nocturno es un poco más heavy), Terminal de Autobuses, Terminal de trenes, **Tokyo Kabukicho Tower**, **Omoide Yokocho** (callejón de bares), **Shinjuku depachika** (paseo de compras subterráneo). **¡Barrio muy guay!** Ideal para salir de fiesta, compras y **Yakimiku** (carne asada). Se recomienda hospedarse del lado este. Spots: **Kabukicho Tower** (con barcitos y lugares de juegos para mabelas), **Omoide Yokodo** (callejón con bares y brochetas), **Golden Gai** (microbares).</li>
+                                <li>**Asakusa:** Calle **Nakamise**, <a href="https://www.google.com/maps/place/Senso-ji+Temple/@35.7147614,139.7946271,17z/data=!3m1!4b1!4m6!3m5!1s0x6018892f03f31777:0xfb8d5a1a1f1e7d!8m2!3d35.7147614!4d139.7946271!16zL20vMDFrNHJf?entry=ttu" target="_blank"><strong>Templo Sensoji</strong></a>, Centro de información turística y cultural de Asakusa, Hotel cápsula Asakusa, Calle **Kappabashi** (bazares), **Skytree**, **Solamachi**.</li>
+                                <li>**Ueno:** **Ameyoko**, **Parque Ueno**, **Museo Metropolitano de Arte de Tokyo**, **Yanesen** (barrio antiguo), Zoo. (Tiene pinta media de once). Está **HIPER conectado** (pasa el tren del aeropuerto).</li>
+                                <li>**Ginza:** **Kabukiza**, barrio comercial de grandes marcas europeas **Ginza Yonchome**, **Mercado de Tsukiji**.</li>
+                                <li>**Marunouchi:** **Estación Central de Tokyo**, **Palacio Imperial**, **TokyoRamen Street**, **Foro Internacional de Tokyo**, **Edificio Marunouchi**.</li>
+                                <li>**Chofu:** **Tokyo Art Museum** (obra de Ando).</li>
+                                <li>**Roppongi/Akasaka:** **Roppongi Hills**, **Azabudai Hills**, **Midtown Garden** (obra de Ando 21 21), **Centro Nacional de Arte de Tokyo**, **Museo de Arte Suntory**, **Museo de Arte Mori**. Roppongi es muy "calletano" y "american style", no hay mucho que hacer.</li>
+                                <li>**Ikebukuro:** **Teatro Metropolitano de Tokyo**, **Sunshine City**, **Anime Tokyo Station**, **Jiyugakuen Miyonichikan**.</li>
+                                <li>**Odaiba:** **Parque Odaiba**, **Fuji TV**, <a href="https://www.google.com/maps/place/teamLab+Planets+TOKYO+DMM/@35.6591781,139.7007267,17z/data=!3m1!4b1!4m6!3m5!1s0x60188981f96b95d1:0x411a7a0b8a3e75a5!8m2!3d35.6591781!4d139.7007267!16s%2Fg%2F11b693246_?entry=ttu" target="_blank"><span class="highlight"><strong>Team Lab Planets Tokyo</strong></span></a> (¡IMPERDIBLE! ✨), **Mercado de Toyosu**, **Ariake Garden**. **NO hospedarse aquí.**</li>
+                            </ol>
+                        </div>
+                    </details>
+                    <h4>Lugares destacados para visitar:</h4>
+                    <ul>
+                        <li><a href="https://www.google.com/maps/place/teamLab+Planets+TOKYO+DMM/@35.6591781,139.7007267,17z/data=!3m1!4b1!4m6!3m5!1s0x60188981f96b95d1:0x411a7a0b8a3e75a5!8m2!3d35.6591781!4d139.7007267!16s%2Fg%2F11b693246_?entry=ttu" target="_blank"><strong>TeamLab Planets Digital Art Museum</strong></a>: ¡Sueño de Nico, por su adicción a la tecnología, ciencia ficción y arquitectura!</li>
+                        <li>**Skytree:** Torre panorámica, muy buena de noche.</li>
+                        <li>**Palacio Imperial de Tokio.**</li>
+                        <li>**Recorrido guiado en Karting en Shibuya:** No se acuerdan la agencia pero hay que buscarlo, es un flash de noche hacerlo mejor.</li>
+                        <li>**Monte Fuji y Lago Kawaguchi:** Ahí está también el **Santuario Arakura Sengen** y la **Pagoda Chureito Oshino Kakkai** (¡Esta es un flash! 📸).</li>
+                    </ul>
+
+                    <h3><span role="img" aria-label="noche">🌃</span> Noche en Tokio</h3>
+                    <details>
+                        <summary>Planes nocturnos en Tokio</summary>
+                        <div class="details-content">
+                            <ul>
+                                <li><strong>Los Barrios</strong> para esto son **Roppongi**, **Shibuya** y **Shinjuko**.</li>
+                                <li><strong>Lugares a visitar de noche</strong> son mejores que de día: **Torre de TOKYO**, **Puente del Arcoíris**, **Harajuku**.</li>
+                                <li><strong>Puesta de Sol impresionante:</strong> **Parque Daiba**.</li>
+                                <li>Para **compras de noche** cosas exclusivas, vintage, raras, siempre hay cosas accesibles, increíbles de diseño: **Calle del Gato** y la **Avenida Omotesando** (estas son perlitas locales no para turistas). El barrio de **Harajuku** también.</li>
+                                <li><strong>Club Nocturno Exclusivo (Genius en Ginza):</strong> Es el más top, se entra solo con membresía, pero si quieren ir, preguntar en la puerta por **Sensei Chiu Wai** (jefe de coordinación de Seguridad, uno de los Sensei top de kung fu japonés). Fue maestro de kung fu de Alex Tien-long y le tiene que decir que va de parte de Alex Tien-long. Sabrá enseguida quién es y lo dejará pasar. (¡Advertencia: "se vuelve de novio con una geisha y la actual la deja en casa"! 😅)</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <hr>
+
+            <details class="city-section" id="osaka-city">
+                <summary><span role="img" aria-label="pulpo">🐙</span> OSAKA</summary>
+                <div class="city-content">
+                    <h3><span role="img" aria-label="tren bala">🚅</span> Transporte a Osaka</h3>
+                    <div class="note">
+                        <strong>¡Tickets de Shinkansen Tokio-Osaka comprados!</strong> ✅
                         <ul>
-                            <li>**Parque de Nara:** Famoso por sus venados **Sika** 🦌. Darles galletitas **Sika Senbei** para los ciervos.</li>
-                            <li>**Todai-Ji:** Templo budista más famoso de Nara. Alberga al **GRAN BUDA (Daibutsu)**. Entrada 600¥.</li>
-                            <li>**Kasuga Taisha:** Santuario Sintoísta milenario con **1000 lámparas de piedra y bronce** por el bosque. Entrada al santuario principal 500¥. El entorno es gratis.</li>
-                            <li>**Kofuku-ji:** Templo que tiene una **Pagoda de cinco pisos**. Típica de Nara.</li>
-                        </ul>
-                    </div>
-                </details>
-                <h3><span role="img" aria-label="compras">🛍️</span> Compras y Comida en Nara</h3>
-                <details>
-                    <summary>Compras y delicias en Nara</summary>
-                    <div class="details-content">
-                        <ul>
-                            <li>**Calle Sanjo-Dori** y **Mochi Nakirimochi:** Calle con tiendas y souvenirs. Buscar el local **NAKIRIMOCHI** que hacen **Mochis calentitos golpeados** con unas masas.</li>
-                            <li>**Bosque de Kazugayama:** (más allá del Kasuga Taisha).</li>
+                            <li><strong>Fecha de Salida:</strong> <span class="highlight">Jun 16, 2025</span></li>
+                            <li><strong>Ruta:</strong> **Tokyo** (09:00) --> **NOZOMI 223** --> **Shin-Osaka** (11:30)</li>
+                            <li><strong>Asientos:</strong> Car.6 Seat.8-D y Car.6 Seat.8-E (¡Mirando al Fuji! 🤩)</li>
+                            <li><strong>Costo Total (2 personas):</strong> <span class="highlight">28,640 Yen</span></li>
+                            <li><strong>Guía para QR-Ticket:</strong> <a href="https://smart-ex.jp/en/entraining/qr/" target="_blank">smart-ex.jp/en/entraining/qr/</a></li>
+                            <li>Se compró solo la ida, ya que la vuelta dependerá de las actividades finales en Osaka/Kioto/Nara.</li>
                         </ul>
                     </div>
-                </details>
+                    
+                    <h3><span role="img" aria-label="cama">🛌</span> Hospedaje en Osaka</h3>
+                    <ul>
+                        <li><strong>Fechas:</strong> <span class="highlight">16/06 al 21/06</span> (5 noches)</li>
+                        <li><strong>Opciones de Airbnb Consideradas:</strong>
+                            <ul>
+                                <li><a href="https://www.airbnb.com/rooms/1343940212983035218?adults=2&check_in=2025-06-16&check_out=2025-06-21&search_mode=regular_search&source_impression_id=p3_1745767131_P3SzGasAuVgZZHCG&previous_page_section_name=1000&federated_search_id=5fac5545-d11e-428c-b0a9-e42fdea9e115" target="_blank">Opción 1 de Braian</a></li>
+                                <li><a href="https://www.airbnb.com/l/wlg55yJ4" target="_blank">Opción 2 de Nico</a></li>
+                            </ul>
+                        </li>
+                        <li><strong>Recomendación de Braian:</strong> Quedarse en **Osaka** y no en **Kioto**, e ir y volver a los lugares desde allí.</li>
+                    </ul>
+
+                    <h3><span role="img" aria-label="lugares de interés">📍</span> Lugares para Visitar en Osaka</h3>
+                    <details>
+                        <summary>Atracciones en Osaka</summary>
+                        <div class="details-content">
+                            <ul>
+                                <li>Se disfruta más de noche. **Kobe** es muy similar a Osaka.</li>
+                                <li>**Namba** y **Dotonbori:** son dos lugares para disfrutar de la noche, luces de neón, **Izakayas** y karaoke.</li>
+                                <li>**Tempozan Giant Ferris Wheel:** Gran noria con vistas al puerto y al atardecer.</li>
+                                <li>**Shinsekai & Torre Tsutenkaku:** Parecido a **Dotonbori**. Lugar de comida barata (**Kushikatsu**). Ideal para vivir **OSAKA Retro**. **¡Cierra a las 8 pm!** ⏰ Cuidado.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <h4>Excursiones y Parques Temáticos desde Osaka:</h4>
+                    <details>
+                        <summary>Universal Studios Japan y Expo 2025</summary>
+                        <div class="details-content">
+                            <ul>
+                                <li><a href="https://www.google.com/maps/place/Universal+Studios+Japan/@34.665442,135.4323382,17z/data=!3m1!4b1!4m6!3m5!1s0x6000e6284699564f:0xae793e284090b435!8m2!3d34.665442!4d135.4323382!16s%2Fg%2F12275y93?entry=ttu" target="_blank"><strong>Universal Studios Japan</strong></a>: Entrada cuesta aproximadamente <span class="highlight"><strong>150 USD con Fast Pass</strong></span> (depende de las atracciones deseadas). La idea del **Fast Pass** es para no hacer colas interminables. Se puede sacar cuando estén allá.</li>
+                                <li>**Expo Universal 2025 en Osaka:**
+                                    <ul>
+                                        <li>**Página Oficial:** <a href="https://www.expo2025.or.jp/en/" target="_blank">expo2025.or.jp/en/</a></li>
+                                        <li>**Mapa General:** <a href="https://www.expo2025.or.jp/wp/wp-content/themes/expo2025orjp_2022/assets/pdf/expo-map-index/map/map01_A4_color_en.pdf" target="_blank">PDF del mapa</a></li>
+                                        <li>**Guía de Alan x el Mundo:** <a href="https://alanxelmundo.com/guia-para-visitar-la-expo-universal-2025-en-osaka/" target="_blank">Guía completa</a>. Recomienda reservar los pabellones con anticipación.</li>
+                                        <li>**Video de Alan x el Mundo:** <a href="https://www.youtube.com/watch?v=UMkNj8YRY70&ab_channel=alanxelmundo" target="_blank">Video de la Expo</a> (¡Nico está muy emocionado por la tecnología, ciencia ficción y arquitectura! 🤩).</li>
+                                        <li>**Ubicación en Google Maps:** <a href="https://www.google.com/maps/place/Yumeshima,+Konohana+Ward,+Osaka,+Japan/@34.65241,135.38959,15z/data=!3m1!4b1!4m6!3m5!1s0x35492d24249a2a97:0x5e237300a9414e21!8m2!3d34.65241!4d135.38959!16s%2Fg%2F11b693246_?entry=ttu" target="_blank"><strong>Yumeshima Island</strong></a>.</li>
+                                        <li>**Costo del Ticket de Entrada:** <span class="highlight"><strong>46 euros</strong></span>.</li>
+                                        <li>**Tamaño:** Es <span class="highlight">GIGANTE</span>.</li>
+                                        <li>**Importante:** Si llueve, no conviene ir (según Alan x el Mundo). ☔</li>
+                                        <li>**TOP 10 de Pabellones (según Alex x Elmundo):** **Países Bajos**, **Kuwait**, **The Land of Nomo**, **Japón**, **EEUU**, **Paso a Natureboy**, **Null2**, **Francia**, **Future of Life**.</li>
+                                        <li>Se pueden comprar **pasaportes para sellitos** de los pabellones (1500Y-2000Y) 🛂.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <h3><span role="img" aria-label="comida">🍽️</span> Comida y Bebida en Osaka</h3>
+                    <details>
+                        <summary>Delicias culinarias en Osaka</summary>
+                        <div class="details-content">
+                            <ul>
+                                <li>**Dotonbori:** el corazón vibrante de la ciudad. Cosas a probar: **Takoyaki** y **Okonomiyaki**.</li>
+                                <li>**Kuromon Ichiba Market:** Mercado callejero más famoso de Osaka donde hay **street food** (ideal foodies). Los mercados funcionan hasta las 5/6 pm, no de noche ‼️
+                                    <ul>
+                                        <li>Recomendable: **Anguila** (1000¥).</li>
+                                        <li>NO recomendable: **Kobe beef burger** y las brochetas de **wagyu** (demasiado sobrevaloradas).</li>
+                                        <li>Postres recomendado: **Mochi de frutilla** (con frutilla encima).</li>
+                                    </ul>
+                                </li>
+                                <li>Probar **UDON con carne Wagyu** (tratar de evitar las cadenas).</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </details>
+            
+            <hr>
+
+            <details class="city-section" id="kioto-city">
+                <summary><span role="img" aria-label="templo">⛩️</span> KIOTO</summary>
+                <div class="city-content">
+                    <h3><span role="img" aria-label="lugares de interés">📍</span> Lugares para Visitar en Kioto</h3>
+                    <details>
+                        <summary>Atracciones en Kioto</summary>
+                        <div class="details-content">
+                            <ul>
+                                <li>La ciudad más turística de Japón.</li>
+                                <li><a href="https://www.google.com/maps/place/Fushimi+Inari-taisha+Shrine/@34.967222,135.772778,17z/data=!3m1!4b1!4m6!3m5!1s0x60010f135b1d9c49:0x8e83344d5a9d8d6!8m2!3d34.967222!4d135.772778!16s%2Fg%2F12275y93?entry=ttu" target="_blank"><strong>Fushimi Inari</strong></a>: el templo de los **1000 Toris** (para sacarse fotos vacíos hay que llegar al amanecer por lo que sino está lleno de gente). **LLEGAR A LA ÚLTIMA VISTA DE LA CIUDAD.** No seguir subiendo ‼️ La comida callejera de ahí no es de calidad.</li>
+                                <li><a href="https://www.google.com/maps/place/Kiyomizu-dera+Temple/@34.994830555556,135.78500277778,17z/data=!3m1!4b1!4m6!3m5!1s0x6001053f3e18a8b1:0x41f3e1b12b5d4e1!8m2!3d34.994830555556!4d135.78500277778!16s%2Fg%2F12275y93?entry=ttu" target="_blank"><strong>Kiyomizu-dera (Kuomyzudera)</strong></a>: Templo budista más famoso de Kioto (500¥ - Accesible). Las mejores vistas.</li>
+                                <li>**Kimono Forest** (noche).</li>
+                                <li>**Parque de los Monos:** 40 minutos en subida. Un espacio lleno de monos 🐒.</li>
+                                <li>**El bosque de Bambú** (Arashiyama) está abierto siempre pero los locales a las 5/6 empieza a cerrar (11 a 20hs horario comercial, y las áreas naturales más o menos de las 9am a 17). En una hora se puede recorrer todo el bosque.</li>
+                                <li>**Otros templos importantes:** **Santuario Agustín Inari Taisha**, **Templo Kitomizudera**, **Templo Hokokuji**.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <h3><span role="img" aria-label="comida">🍽️</span> Comida en Kioto</h3>
+                    <details>
+                        <summary>Qué comer en Kioto</summary>
+                        <div class="details-content">
+                            <ul>
+                                <li>**Mercado Nishiki:** Mercado recomendado para comer comida callejera. Muchas opciones y muy rico (no necesariamente barata la comida callejera).</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <hr>
+
+            <details class="city-section" id="nara-city">
+                <summary><span role="img" aria-label="ciervo">🦌</span> NARA</summary>
+                <div class="city-content">
+                    <h3><span role="img" aria-label="lugares de interés">📍</span> Lugares para Visitar en Nara</h3>
+                    <details>
+                        <summary>Atracciones en Nara</summary>
+                        <div class="details-content">
+                            <ul>
+                                <li><a href="https://www.google.com/maps/place/Nara+Park/@34.6850013,135.8450117,15z/data=!3m1!4b1!4m6!3m5!1s0x600138981f422ed5:0x5e37341e309f5e3e!8m2!3d34.6850013!4d135.8450117!16s%2Fg%2F11b693246_?entry=ttu" target="_blank"><strong>Parque de Nara</strong></a>: Famoso por sus venados **Sika** 🦌. Darles galletitas **Sika Senbei** para los ciervos.</li>
+                                <li><a href="https://www.google.com/maps/place/Todai-ji+Temple/@34.68917,135.83972,17z/data=!3m1!4b1!4m6!3m5!1s0x600138981f422ed5:0x5e37341e309f5e3e!8m2!3d34.68917!4d135.83972!16s%2Fg%2F12275y93?entry=ttu" target="_blank"><strong>Todai-Ji</strong></a>: Templo budista más famoso de Nara. Alberga al **GRAN BUDA (Daibutsu)**. Entrada 600¥.</li>
+                                <li>**Kasuga Taisha:** Santuario Sintoísta milenario con **1000 lámparas de piedra y bronce** por el bosque. Entrada al santuario principal 500¥. El entorno es gratis.</li>
+                                <li>**Kofuku-ji:** Templo que tiene una **Pagoda de cinco pisos**. Típica de Nara.</li>
+                            </ul>
+                        </div>
+                    </details>
+                    <h3><span role="img" aria-label="compras">🛍️</span> Compras y Comida en Nara</h3>
+                    <details>
+                        <summary>Compras y delicias en Nara</summary>
+                        <div class="details-content">
+                            <ul>
+                                <li>**Calle Sanjo-Dori** y **Mochi Nakirimochi:** Calle con tiendas y souvenirs. Buscar el local **NAKIRIMOCHI** que hacen **Mochis calentitos golpeados** con unas masas.</li>
+                                <li>**Bosque de Kazugayama:** (más allá del Kasuga Taisha).</li>
+                            </ul>
+                        </div>
+                    </details>
+                </div>
+            </details>
+
+            <hr>
+
+            <h2 id="nikko-hakone"><span role="img" aria-label="montaña">⛰️</span> NIKKO y HAKONE</h2>
+            <ul>
+                <li>Son dos **destinos diurnos** para hacer desde Tokio.</li>
+            </ul>
+
+            <hr>
+
+            <h2 id="comida-general"><span role="img" aria-label="sushi">🍣</span> Guía de Comida General (aplicable en varias ciudades)</h2>
+            <details>
+                <summary>Opciones de comida rápida y sushi</summary>
+                <div class="details-content">
+                    <h3>Comida Rápida (Comer e Irse) - Precios promedio</h3>
+                    <ul>
+                        <li>**MATSUIA:** El lugar más famoso de comida rápida japonesa y es rico y barato.</li>
+                        <li>**TENDON TENYA:** (Arroz con tempura) en promedio 7uss por plato.</li>
+                        <li>**OOTOYA:** (comida tradicional) Promedio 7uss por plato.</li>
+                        <li>**YAYOIKEN:** (es parecida a OOTOYA un poco más barato).</li>
+                        <li>**YAKINIKU LIKE:** 10uss (“yakiniku” son parrilleras de carne cruda y te lo cocinas en la mesa) para dos está bien pero hay otros lugares donde sale un más caro y hay mejor carne y más opciones (**wagyü** - carne japonesa) y es más grande.</li>
+                        <li>**KATSUYA:** (**katsudon** o **tonkatsu** - milanesa rebozada de cerdo con huevo o sola) 6uss el plato.</li>
+                    </ul>
+                    <h3>Cadenas de Sushi BBB (Bueno, Bonito, Barato)</h3>
+                    <ul>
+                        <li>**SUSHIRO**</li>
+                        <li>**KURA SUSHI**</li>
+                        <li>**HAMA SUSHI** (25/30USS)</li>
+                    </ul>
+                </div>
+            </details>
+            <details>
+                <summary>Comida Callejera y Postres</summary>
+                <div class="details-content">
+                    <h3>Comida Callejera</h3>
+                    <ul>
+                        <li>**Mercado de Tsukiji (Tokio):** El mejor mercado pero no es el más barato! - viernes o sábado.
+                            <ul>
+                                <li>**Brocheta de Anguila**.</li>
+                                <li>**Brocheta de tripa de anguila**.</li>
+                                <li>**Huevo de Salmón con erizo** (1500¥) solo para probar 1 no está tan bueno.</li>
+                            </ul>
+                        </li>
+                        <li>**Mercado Nishiki (Kioto):** Mercado recomendado para comer comida callejera. Muchas opciones y muy rico (no necesariamente barata la comida callejera).</li>
+                        <li>**Kuromon Ichiba Market (Osaka):** Ver detalles en sección <a href="#osaka-city">Osaka</a>.</li>
+                    </ul>
+                    <h3>Postres</h3>
+                    <ul>
+                        <li>**Mochi de frutilla** (con frutilla encima), recomendado en Kuromon Ichiba Market.</li>
+                        <li>Braian tiene "lugarcitos de cheesecake" que compartirá.</li>
+                    </ul>
+                </div>
+            </details>
+            <details>
+                <summary>Bebidas</summary>
+                <div class="details-content">
+                    <h3>Alcohol</h3>
+                    <ul>
+                        <li>Diferentes tipos de **Sake**.</li>
+                        <li>Es más rico el dulce que el seco (600/700/800¥ o 1000¥ euros por el testeo que probas de todos un poco).</li>
+                    </ul>
+                </div>
+            </details>
+
+            <hr>
+
+            <h2 id="compras"><span role="img" aria-label="bolsa de compras">🛍️</span> Locales Comerciales y Souvenirs General</h2>
+            <details>
+                <summary>Guía de Compras</summary>
+                <div class="details-content">
+                    <h3>Electrónica:</h3>
+                    <ul>
+                        <li>**BIC CAMERA** (<a href="#tokio-city">Akihabara, Tokio</a>)</li>
+                        <li>**YODOBASHI camera** (<a href="#tokio-city">Akihabara, Tokio</a>)</li>
+                    </ul>
+                    <h3>Ropa:</h3>
+                    <ul>
+                        <li>**MUJI**</li>
+                        <li>**UNIQLO** (La marca más barata)</li>
+                        <li>**GU** (igual de UNIQLO pero más barata)</li>
+                    </ul>
+                    <h3>De TODO y Souvenirs:</h3>
+                    <ul>
+                        <li>**Village Vanguard** (<a href="#tokio-city">Shinjuku, Tokio</a> u oeste de Tokio)</li>
+                        <li>**Don Quijote** en <a href="#tokio-city">Akihabara, Tokio</a> (¡tiene de TODO!)</li>
+                        <li>**DAISO** 🚨 (¡todo por 100Y! El más barato de todos).</li>
+                    </ul>
+                    <h3>Goshuincho (El Mejor Recuerdo de Japón):</h3>
+                    <ul>
+                        <li>Libreta que se compra en templos o zonas turísticas. En los templos, por 500 Yenes, te sellan la libreta. Acercarse y decir "Goshuin". Las libretas suelen costar de entre 1500Y y 2000Y.
+                            Se consiguen o bien en el propio templo en el área de amuletos.
+                            <ul>
+                                <li><strong>Los más lindos están en:</strong> <a href="#tokio-city">Sensoji de Asakusa</a>, <a href="#kioto-city">Kiyomisudera de Kioto</a>, <a href="#tokio-city">Santuario MEIJI</a>, <a href="#kioto-city">Fujimi Inari de Kioto</a>.</li>
+                                <li><strong>Mejores 7 de Japón:</strong> <a href="https://goo.gl/maps/f9zzfJEfP2UVpRxe8" target="_blank">Enlace a Google Maps</a></li>
+                                <li><strong>Mejores Goishus de Tokio:</strong> <a href="https://maps.app.goo.gl/pkpogxdPPfv5YHij6" target="_blank">Enlace a Google Maps</a></li>
+                            </ul>
+                        </li>
+                        <li>Braian tiene dos "lugarcitos pa comprar kimono y ropita" que compartirá.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <hr>
+
+            <h2 id="ando"><span role="img" aria-label="edificio">🏛️</span> Obras de Tadao Ando (para amantes de la arquitectura)</h2>
+            <details>
+                <summary>Explora la arquitectura de Tadao Ando</summary>
+                <div class="details-content">
+                    <ul>
+                        <li>Muchas se encuentran en <a href="#osaka-city">Osaka</a>, y otras en diferentes zonas del país como **Hokkaido**, **Hyogo**.</li>
+                        <li>Habría que tomarse unos días en **Osaka** y **Hyogo** para seguir contemplando sus obras.</li>
+                        <li><strong>Obras en Japón:</strong>
+                            <ul>
+                                <li>**Casa Azuma**, Osaka</li>
+                                <li>**Osakasayama Ike Museum**, Osaka</li>
+                                <li>**Church of the Light**, Ibaraki</li>
+                                <li>**Capilla en el agua**, Hokkaido</li>
+                                <li>**Hyogo Prefectural Museum of Art**, Hyogo</li>
+                                <li>**Awaji Yumebutai**, Hyogo</li>
+                                <li>**4x4 House**, Hyogo</li>
+                                <li>**Chichu Museum de Naoshima**, Kagawa</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </details>
+
+            <hr>
+
+            <h2 id="curiosidades"><span role="img" aria-label="bombilla">💡</span> Notas y Datos Curiosos</h2>
+            <details>
+                <summary>Curiosidades y bromas del viaje</summary>
+                <div class="details-content">
+                    <ul>
+                        <li>Nico es un "meteorólogo" que está siguiendo las estimaciones del clima. Por ahora, Osaka parece que lloverá el día 17. ☔</li>
+                        <li>Se habló de "vestiditos" para la Expo, pero Nico cree que no.</li>
+                        <li>Se hicieron chistes sobre los pabellones de Latinoamérica en la Expo (**Perú** parece entrada a local de **Havana**, **Colombia** con mariposas de **Shein**, **Brasil** con papel mache).</li>
+                        <li>La "burbuja que cae del cielo" en **Canadá** (Expo) genera dudas sobre su contenido.</li>
+                        <li>Nico está muy emocionado con la Expo por la tecnología, ciencia ficción y arquitectura. ✨</li>
+                        <li>Braian comenta que la página oficial de Universal Studios (USJ) es lenta.</li>
+                        <li>Braian preguntaba si había que volver de Osaka a Tokio para el vuelo de regreso, y Nico aclaró que no, que pueden volver desde Kioto si deciden terminar allí.</li>
+                        <li>Se menciona a "Albertito" (referencia al clima/temperatura, posiblemente una app o una persona).</li>
+                        <li>El idioma: Braian intentó escribir en japonés ("なかなやはさな") sin saber qué significa. Se preguntan cómo les irá hablando japonés. 🗣️</li>
+                    </ul>
+                </div>
+            </details>
+
+            <div class="footer">
+                <p>¡Que disfruten mucho del Mabelasaki Asian Trip! 🌸🎌</p>
+                <p>Creado con ❤️ para Nico y Braian.</p>
             </div>
-        </details>
+        </div> </div> <script>
+        function openNav() {
+            document.getElementById("sidebarMenu").style.width = "250px";
+            document.body.classList.add("sidebar-open");
+        }
 
-        <hr>
+        function closeNav() {
+            document.getElementById("sidebarMenu").style.width = "0";
+            document.body.classList.remove("sidebar-open");
+        }
 
-        <h2 id="nikko-hakone"><span role="img" aria-label="montaña">⛰️</span> NIKKO y HAKONE</h2>
-        <ul>
-            <li>Son dos **destinos diurnos** para hacer desde Tokio.</li>
-        </ul>
-
-        <hr>
-
-        <h2 id="comida-general"><span role="img" aria-label="sushi">🍣</span> Guía de Comida General (aplicable en varias ciudades)</h2>
-        <details>
-            <summary>Opciones de comida rápida y sushi</summary>
-            <div class="details-content">
-                <h3>Comida Rápida (Comer e Irse) - Precios promedio</h3>
-                <ul>
-                    <li>**MATSUIA:** El lugar más famoso de comida rápida japonesa y es rico y barato.</li>
-                    <li>**TENDON TENYA:** (Arroz con tempura) en promedio 7uss por plato.</li>
-                    <li>**OOTOYA:** (comida tradicional) Promedio 7uss por plato.</li>
-                    <li>**YAYOIKEN:** (es parecida a OOTOYA un poco más barato).</li>
-                    <li>**YAKINIKU LIKE:** 10uss (“yakiniku” son parrilleras de carne cruda y te lo cocinas en la mesa) para dos está bien pero hay otros lugares donde sale un más caro y hay mejor carne y más opciones (**wagyü** - carne japonesa) y es más grande.</li>
-                    <li>**KATSUYA:** (**katsudon** o **tonkatsu** - milanesa rebozada de cerdo con huevo o sola) 6uss el plato.</li>
-                </ul>
-                <h3>Cadenas de Sushi BBB (Bueno, Bonito, Barato)</h3>
-                <ul>
-                    <li>**SUSHIRO**</li>
-                    <li>**KURA SUSHI**</li>
-                    <li>**HAMA SUSHI** (25/30USS)</li>
-                </ul>
-            </div>
-        </details>
-        <details>
-            <summary>Comida Callejera y Postres</summary>
-            <div class="details-content">
-                <h3>Comida Callejera</h3>
-                <ul>
-                    <li>**Mercado de Tsukiji (Tokio):** El mejor mercado pero no es el más barato! - viernes o sábado.
-                        <ul>
-                            <li>**Brocheta de Anguila**.</li>
-                            <li>**Brocheta de tripa de anguila**.</li>
-                            <li>**Huevo de Salmón con erizo** (1500¥) solo para probar 1 no está tan bueno.</li>
-                        </ul>
-                    </li>
-                    <li>**Mercado Nishiki (Kioto):** Mercado recomendado para comer comida callejera. Muchas opciones y muy rico (no necesariamente barata la comida callejera).</li>
-                    <li>**Kuromon Ichiba Market (Osaka):** Ver detalles en sección <a href="#osaka-city">Osaka</a>.</li>
-                </ul>
-                <h3>Postres</h3>
-                <ul>
-                    <li>**Mochi de frutilla** (con frutilla encima), recomendado en Kuromon Ichiba Market.</li>
-                    <li>Braian tiene "lugarcitos de cheesecake" que compartirá.</li>
-                </ul>
-            </div>
-        </details>
-        <details>
-            <summary>Bebidas</summary>
-            <div class="details-content">
-                <h3>Alcohol</h3>
-                <ul>
-                    <li>Diferentes tipos de **Sake**.</li>
-                    <li>Es más rico el dulce que el seco (600/700/800¥ o 1000¥ euros por el testeo que probas de todos un poco).</li>
-                </ul>
-            </div>
-        </details>
-
-        <hr>
-
-        <h2 id="compras"><span role="img" aria-label="bolsa de compras">🛍️</span> Locales Comerciales y Souvenirs General</h2>
-        <details>
-            <summary>Guía de Compras</summary>
-            <div class="details-content">
-                <h3>Electrónica:</h3>
-                <ul>
-                    <li>**BIC CAMERA** (<a href="#tokio-city">Akihabara, Tokio</a>)</li>
-                    <li>**YODOBASHI camera** (<a href="#tokio-city">Akihabara, Tokio</a>)</li>
-                </ul>
-                <h3>Ropa:</h3>
-                <ul>
-                    <li>**MUJI**</li>
-                    <li>**UNIQLO** (La marca más barata)</li>
-                    <li>**GU** (igual de UNIQLO pero más barata)</li>
-                </ul>
-                <h3>De TODO y Souvenirs:</h3>
-                <ul>
-                    <li>**Village Vanguard** (<a href="#tokio-city">Shinjuku, Tokio</a> u oeste de Tokio)</li>
-                    <li>**Don Quijote** en <a href="#tokio-city">Akihabara, Tokio</a> (¡tiene de TODO!)</li>
-                    <li>**DAISO** 🚨 (¡todo por 100Y! El más barato de todos).</li>
-                </ul>
-                <h3>Goshuincho (El Mejor Recuerdo de Japón):</h3>
-                <ul>
-                    <li>Libreta que se compra en templos o zonas turísticas. En los templos, por 500 Yenes, te sellan la libreta. Acercarse y decir "Goshuin". Las libretas suelen costar de entre 1500Y y 2000Y.
-                        Se consiguen o bien en el propio templo en el área de amuletos.
-                        <ul>
-                            <li><strong>Los más lindos están en:</strong> <a href="#tokio-city">Sensoji de Asakusa</a>, <a href="#kioto-city">Kiyomisudera de Kioto</a>, <a href="#tokio-city">Santuario MEIJI</a>, <a href="#kioto-city">Fujimi Inari de Kioto</a>.</li>
-                            <li><strong>Mejores 7 de Japón:</strong> <a href="https://goo.gl/maps/f9zzfJEfP2UVpRxe8" target="_blank">Enlace a Google Maps</a></li>
-                            <li><strong>Mejores Goishus de Tokio:</strong> <a href="https://maps.app.goo.gl/pkpogxdPPfv5YHij6" target="_blank">Enlace a Google Maps</a></li>
-                        </ul>
-                    </li>
-                    <li>Braian tiene dos "lugarcitos pa comprar kimono y ropita" que compartirá.</li>
-                </ul>
-            </div>
-        </details>
-
-        <hr>
-
-        <h2 id="ando"><span role="img" aria-label="edificio">🏛️</span> Obras de Tadao Ando (para amantes de la arquitectura)</h2>
-        <details>
-            <summary>Explora la arquitectura de Tadao Ando</summary>
-            <div class="details-content">
-                <ul>
-                    <li>Muchas se encuentran en <a href="#osaka-city">Osaka</a>, y otras en diferentes zonas del país como **Hokkaido**, **Hyogo**.</li>
-                    <li>Habría que tomarse unos días en **Osaka** y **Hyogo** para seguir contemplando sus obras.</li>
-                    <li><strong>Obras en Japón:</strong>
-                        <ul>
-                            <li>**Casa Azuma**, Osaka</li>
-                            <li>**Osakasayama Ike Museum**, Osaka</li>
-                            <li>**Church of the Light**, Ibaraki</li>
-                            <li>**Capilla en el agua**, Hokkaido</li>
-                            <li>**Hyogo Prefectural Museum of Art**, Hyogo</li>
-                            <li>**Awaji Yumebutai**, Hyogo</li>
-                            <li>**4x4 House**, Hyogo</li>
-                            <li>**Chichu Museum de Naoshima**, Kagawa</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </details>
-
-        <hr>
-
-        <h2 id="curiosidades"><span role="img" aria-label="bombilla">💡</span> Notas y Datos Curiosos</h2>
-        <details>
-            <summary>Curiosidades y bromas del viaje</summary>
-            <div class="details-content">
-                <ul>
-                    <li>Nico es un "meteorólogo" que está siguiendo las estimaciones del clima. Por ahora, Osaka parece que lloverá el día 17. ☔</li>
-                    <li>Se habló de "vestiditos" para la Expo, pero Nico cree que no.</li>
-                    <li>Se hicieron chistes sobre los pabellones de Latinoamérica en la Expo (**Perú** parece entrada a local de **Havana**, **Colombia** con mariposas de **Shein**, **Brasil** con papel mache).</li>
-                    <li>La "burbuja que cae del cielo" en **Canadá** (Expo) genera dudas sobre su contenido.</li>
-                    <li>Nico está muy emocionado con la Expo por la tecnología, ciencia ficción y arquitectura. ✨</li>
-                    <li>Braian comenta que la página oficial de Universal Studios (USJ) es lenta.</li>
-                    <li>Braian preguntaba si había que volver de Osaka a Tokio para el vuelo de regreso, y Nico aclaró que no, que pueden volver desde Kioto si deciden terminar allí.</li>
-                    <li>Se menciona a "Albertito" (referencia al clima/temperatura, posiblemente una app o una persona).</li>
-                    <li>El idioma: Braian intentó escribir en japonés ("なかなやはさな") sin saber qué significa. Se preguntan cómo les irá hablando japonés. 🗣️</li>
-                </ul>
-            </div>
-        </details>
-
-        <div class="footer">
-            <p>¡Que disfruten mucho del Mabelasaki Asian Trip! 🌸🎌</p>
-            <p>Creado con ❤️ para Nico y Braian.</p>
-        </div>
-    </div>
-
-    <script>
-        // JavaScript para que al abrir un acordeón de ciudad, los demás se cierren.
         document.addEventListener('DOMContentLoaded', () => {
-            const cityDetails = document.querySelectorAll('details.city-section');
+            // Cierra el menú lateral si se hace clic fuera de él (opcional y con cuidado en móviles)
+            // document.getElementById('mainArea').addEventListener('click', function(event) {
+            //     if (document.body.classList.contains('sidebar-open')) {
+            //         // Asegúrate de que el clic no sea en el propio botón de toggle si se mueve con el contenido
+            //         if (!event.target.closest('.menu-toggle-btn') && !event.target.closest('.sidebar')) {
+            //              closeNav(); // Esto podría ser demasiado agresivo, considéralo cuidadosamente
+            //         }
+            //     }
+            // });
 
+            // Script original para que solo una sección de ciudad esté abierta a la vez
+            const cityDetails = document.querySelectorAll('details.city-section');
             cityDetails.forEach(targetDetail => {
                 targetDetail.addEventListener('toggle', () => {
                     if (targetDetail.open) {
@@ -736,34 +800,52 @@
                     }
                 });
             });
-        });
 
-        // Script para manejar el scroll del menú a las secciones
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.nav-menu a.button').forEach(anchor => {
+            // Manejo de clics en los enlaces del menú lateral
+            document.querySelectorAll('.sidebar-link').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
-
                     const targetId = this.getAttribute('href').substring(1);
                     const targetElement = document.getElementById(targetId);
 
+                    closeNav(); // Cierra el menú lateral primero
+
                     if (targetElement) {
-                        // Si es una sección de ciudad, abre su acordeón
-                        if (targetElement.tagName === 'DETAILS' && targetElement.classList.contains('city-section')) {
-                            targetElement.open = true;
-                        }
-                        
-                        // Espera un poco para que el acordeón se abra y luego hace el scroll
-                        // Se ajusta el scroll para que el elemento quede un poco más abajo del top
+                        // Espera a que el menú lateral se cierre antes de desplazarse para un efecto más suave
                         setTimeout(() => {
-                            window.scrollTo({
-                                top: targetElement.offsetTop - 80, // Ajusta este valor si necesitas más/menos espacio
-                                behavior: 'smooth'
-                            });
-                        }, 100); // Pequeño delay para que el acordeón se abra
+                            if (targetElement.tagName === 'DETAILS' && targetElement.classList.contains('city-section')) {
+                                // Asegura que otras secciones de ciudad estén cerradas
+                                document.querySelectorAll('details.city-section').forEach(det => {
+                                    if (det.id !== targetId && det.open) det.open = false;
+                                });
+                                targetElement.open = true; // Abre la sección de ciudad destino
+                            }
+                            
+                            // Recalcula offsetTop *después* de que los <details> puedan haberse abierto/cerrado
+                            // si afecta significativamente al diseño.
+                            // Por ahora, un pequeño retraso para la coordinación visual es suficiente.
+                            setTimeout(() => {
+                                let offset = 70; // Espacio para cabecera/menú fijo
+                                // Si el menu-toggle-btn es visible y fixed, podrías querer ajustar el offset
+                                // const menuToggleBtn = document.querySelector('.menu-toggle-btn');
+                                // if (menuToggleBtn && getComputedStyle(menuToggleBtn).position === 'fixed') {
+                                //    offset = menuToggleBtn.offsetHeight + 20; // 20px de margen extra
+                                // }
+                                window.scrollTo({
+                                    top: targetElement.offsetTop - offset,
+                                    behavior: 'smooth'
+                                });
+                            }, 150); // Retraso para que los <details> se abran visualmente
+                        }, 300); // Retraso que coincide con la transición de cierre del menú lateral (0.3s)
                     }
                 });
             });
+
+            // Tu script original para que los <details> generales (no city-section) no se cierren entre sí
+            // Si tenías otro script para los `details` que no son `city-section`, puedes añadirlo aquí.
+            // El script que tenías para `document.querySelectorAll('.nav-menu a.button')` ya no es necesario
+            // porque esos botones fueron movidos al menú lateral y su funcionalidad de scroll está cubierta arriba.
+
         });
     </script>
 </body>
