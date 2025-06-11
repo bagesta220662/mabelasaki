@@ -139,7 +139,7 @@
             border-bottom: 3px solid var(--h1-color);
             letter-spacing: 0.5px;
         }
-        h2 { /* Estilo base para H2, usado por otros encabezados de sección */
+        h2 { 
             font-family: var(--secondary-font);
             color: var(--h2-color);
             margin-top: 40px; 
@@ -162,6 +162,19 @@
             border-left: 4px solid var(--accent-color-secondary); 
             padding-left: 12px;
         }
+        /* Estilo para H3 dentro de .details-content (ej. subsecciones de Guía de Comida) */
+        .details-content > h3 {
+            margin-top: 25px;
+            font-size: 1.3em;
+            color: var(--h3-color); /* Mantener el color púrpura */
+            border-left: none; /* Quitar el borde lateral para sub-encabezados */
+            padding-left: 0;   /* Quitar padding para sub-encabezados */
+        }
+        .details-content > h3 span[role="img"] { /* Para alinear el emoji */
+            margin-right: 8px;
+        }
+
+
         h4 { 
             font-family: var(--secondary-font);
             color: var(--h4-color); 
@@ -179,6 +192,36 @@
         li {
             margin-bottom: 8px;
         }
+        /* Estilo para listas de frases japonesas */
+        .japanese-phrases-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .japanese-phrases-list li {
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px dotted #eee;
+        }
+        .japanese-phrases-list li:last-child {
+            border-bottom: none;
+        }
+        .japanese-phrases-list strong { /* La frase principal */
+            display: block;
+            font-size: 1.1em;
+            margin-bottom: 3px;
+        }
+        .japanese-phrases-list em { /* Pronunciación y términos en japonés */
+            color: #555;
+            font-style: italic;
+        }
+        .japanese-phrases-list span.usage-note { /* Nota de uso */
+            display: block;
+            font-size: 0.9em;
+            color: #777;
+            margin-top: 3px;
+        }
+
+
         strong {
             font-weight: 700; 
             color: #222; 
@@ -243,7 +286,7 @@
             overflow: hidden; 
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-        details > summary { /* Selector más específico para summaries directos de details */
+        details > summary { 
             background-color: var(--summary-generic-bg); 
             padding: 15px 20px; 
             font-weight: bold;
@@ -253,7 +296,7 @@
             align-items: center;
             justify-content: space-between;
             color: var(--summary-generic-text); 
-            border-bottom: 1px solid var(--border-color); /* Borde para summary cerrado */
+            border-bottom: 1px solid var(--border-color); 
             transition: background-color 0.2s ease;
         }
         details > summary:hover {
@@ -263,16 +306,16 @@
             background-color: #d5e0e0; 
             border-bottom-color: #c8d3d3; 
         }
-        /* Ocultar el marcador de detalles predeterminado */
+        
         details > summary::-webkit-details-marker { display: none; }
-        details > summary::marker { display: none; } /* Para Firefox */
+        details > summary::marker { display: none; } 
 
         details > summary::after { 
             content: '▼';
             font-size: 0.9em;
             transition: transform 0.2s ease;
             color: var(--summary-generic-text); 
-            margin-left: 10px; /* Asegura espacio si el texto es largo */
+            margin-left: 10px; 
         }
         details[open] > summary::after {
             transform: rotate(180deg);
@@ -307,18 +350,18 @@
             padding: 20px 25px;
         }
         
-        /* Nested details within city-content or details-content */
+        /* Nested details within city-content or .details-content (como en Guía de Comida) */
         .city-content details summary, 
-        .details-content details summary { /* Summary de details anidados */
+        .details-content details summary { 
             background-color: var(--summary-generic-bg);
             color: var(--summary-generic-text);
             font-size: 1.1em; 
             padding: 12px 15px;
-            border-top: 1px solid var(--border-color); /* Añade un separador superior para anidados */
+            border-top: 1px solid var(--border-color); 
         }
         .city-content details:first-child > summary,
         .details-content details:first-child > summary {
-             border-top: none; /* Evitar doble borde si es el primer details anidado */
+             border-top: none; 
         }
 
         .city-content details[open] summary,
@@ -349,25 +392,24 @@
             text-decoration: none;
         }
 
-        /* Itinerary Styles - Ajustes para compacidad y alineación */
+        /* Itinerary Styles */
         details#itinerario-details {
-            border: none; /* Sin borde propio si se quiere que el summary actúe como H2 visualmente */
-            box-shadow: none; /* Sin sombra propia */
+            border: none; 
+            box-shadow: none; 
             margin-bottom: 20px;
         }
 
         details#itinerario-details > summary {
-            /* Hereda estilos de H2 visualmente */
             font-family: var(--secondary-font);
             color: var(--h2-color);
             font-size: 1.9em; 
             font-weight: 700;
-            padding: 10px 0; /* Padding vertical, sin padding horizontal para que ocupe ancho */
+            padding: 10px 0; 
             border-bottom: 2px solid var(--border-color); 
             background-color: transparent; 
             display: flex;
             align-items: center;
-            justify-content: flex-start; /* Alinea contenido a la izquierda */
+            justify-content: flex-start; 
             width: 100%;
             cursor: pointer;
         }
@@ -375,34 +417,33 @@
             background-color: #f9f9f9; 
         }
 
-        /* El H2 dentro del summary del itinerario */
         details#itinerario-details > summary h2#itinerario {
             margin: 0; 
             padding: 0; 
             border: none; 
-            font-size: 1em; /* Hereda el tamaño del summary (1.9em) */
+            font-size: 1em; 
             font-weight: inherit; 
             color: inherit; 
             display: inline-flex; 
             align-items: center;
             gap: 12px; 
-            flex-grow: 1; /* Permite que el H2 ocupe el espacio disponible */
+            flex-grow: 1; 
         }
 
-        details#itinerario-details > summary::after { /* Flecha para el itinerario principal */
+        details#itinerario-details > summary::after { 
             content: '▼';
             font-size: 0.7em; 
             color: var(--h2-color);
-            margin-left: 20px; /* Empuja la flecha un poco más a la derecha del texto */
+            margin-left: 20px; 
         }
 
         details#itinerario-details[open] > summary {
-            border-bottom-color: var(--accent-color-main); /* Borde acentuado cuando está abierto */
+            border-bottom-color: var(--accent-color-main); 
         }
 
         #itinerario-details .details-content {
-            padding: 15px 0px 0px 10px; /* Padding superior e izquierdo para el contenido */
-            font-size: 1em; /* Tamaño de fuente base para el contenido del itinerario */
+            padding: 15px 0px 0px 10px; 
+            font-size: 1em; 
         }
 
         .itinerary-day {
@@ -415,12 +456,12 @@
             padding-bottom: 0;
         }
 
-        .itinerary-day h4 { /* Títulos de días */
+        .itinerary-day h4 { 
             color: var(--h4-color);
             margin-top: 8px; 
             margin-bottom: 6px; 
             font-size: 1.1em; 
-            font-weight: bold; /* Asegurar negrita */
+            font-weight: bold; 
             border-bottom: none;
             padding-left: 0;
             border-left: none;
@@ -428,30 +469,30 @@
             align-items: center;
             gap: 8px; 
         }
-        .itinerary-day h4 span[role="img"] { /* Ajustar tamaño del emoji si es necesario */
+        .itinerary-day h4 span[role="img"] { 
             font-size: 1.1em;
         }
 
 
         .itinerary-day ul {
-            list-style-type: none; /* Quitar viñeta por defecto */
-            padding-left: 5px; /* Reducir padding para alineación */
+            list-style-type: none; 
+            padding-left: 5px; 
             margin-top: 5px;
             margin-bottom: 5px;
-            font-size: 0.9em; /* Más compacto */
+            font-size: 0.9em; 
         }
 
         .itinerary-day ul li {
             margin-bottom: 4px; 
-            padding-left: 22px; /* Espacio para el emoji y texto */
-            position: relative; /* Para posicionar el emoji */
+            padding-left: 22px; 
+            position: relative; 
         }
         .itinerary-day ul li::before {
-            content: '✈️'; /* Emoji como viñeta */
+            content: '✈️'; 
             position: absolute;
             left: 0;
-            top: 1px; /* Ajuste vertical fino */
-            font-size: 0.9em; /* Tamaño del emoji */
+            top: 1px; 
+            font-size: 0.9em; 
         }
 
 
@@ -513,6 +554,7 @@
         <a href="#nikko-hakone" class="sidebar-link">Nikko/Hakone</a>
         <a href="#comida-general" class="sidebar-link">Guía de Comida</a>
         <a href="#locales-comerciales" class="sidebar-link">Locales Comerciales</a>
+        <a href="#frases-japonesas" class="sidebar-link">Frases Japonesas</a>
         <a href="#ando" class="sidebar-link">Obras de Tadao Ando</a>
         <a href="#curiosidades" class="sidebar-link">Curiosidades</a>
     </nav>
@@ -537,7 +579,7 @@
             <h3><span role="img" aria-label="mapa">🗺️</span> Mapas y Ubicaciones Clave</h3>
             <ul>
                 <li>Braian se encargará de armar un <strong>mapita</strong> de los lugares a visitar, con íconos de sushi 🍣 para restaurantes.</li>
-                <li><strong>Mapa MUST de Japón (no editable):</strong> <a href="https://www.google.com/maps/d/viewer?mid=1Y0KmSPdCRoAlQNz3jp8ort359sA&hl=en_US" target="_blank">Mapa de Hideto Nakamura</a>. (Ejemplo de link funcional).</li>
+                <li><strong>Mapa MUST de Japón (no editable):</strong> <a href="https://www.google.com/maps/place/Universal+Studios+Japan/@34.665442,135.4323382,17z/data=!3m1!4b1!4m6!3m5!1s0x6000e6284699564f:0xae793e284090b435!8m2!3d34.665442!4d135.4323382!16s%2Fg%2F12275y93?entry=ttu3" target="_blank">Mapa de Hideto Nakamura</a>. (Ejemplo de link funcional).</li>
             </ul>
 
             <h3><span role="img" aria-label="cambio de divisa">💸</span> Cambio de Divisas y Pagos</h3>
@@ -557,7 +599,7 @@
             
             <details id="itinerario-details">
                 <summary>
-                    <h2 id="itinerario" style="border-bottom: none; margin-bottom:0; width: auto; /* Ajuste para que no ocupe todo el ancho y permita la flecha */"><span role="img" aria-label="calendario">📅</span> Itinerario Detallado</h2>
+                    <h2 id="itinerario" style="border-bottom: none; margin-bottom:0; width: auto;"><span role="img" aria-label="calendario">📅</span> Itinerario Detallado</h2>
                 </summary>
                 <div class="details-content">
                     <div class="itinerary-day">
@@ -625,7 +667,7 @@
                                     <li>Explorar más de Osaka (Shinsekai, mercados, etc.).</li>
                                 </ul>
                             </li>
-                            <li><strong>Tarde del Sábado 21 de Junio:</strong> Viaje en Shinkansen de Shin-Osaka a Tokio.</li>
+                            <li><strong>Sábado 21 de Junio:</strong> Viaje en Shinkansen de Shin-Osaka a Tokio (Asiento Car.6 Seat.12-D confirmado, horario exacto de salida por la tarde a definir/confirmar).</li>
                             <li>Noche: Check-in en el hotel cápsula en Tokio (9h nine hours Akasaka).</li>
                         </ul>
                     </div>
@@ -654,32 +696,34 @@
 
             <h2 id="transporte"><span role="img" aria-label="billete de tren">🎟️</span> Transporte Confirmado y General</h2>
             <div class="note">
-                <strong>¡Tickets de Shinkansen Tokio-Osaka comprados!</strong> ✅
+                <strong>¡Billetes de Shinkansen Comprados!</strong> ✅
                 <ul>
-                    <li><strong>Fecha de Salida:</strong> <span class="highlight">Jun 16, 2025</span></li>
-                    <li><strong>Ruta:</strong> <strong>Tokyo</strong> (09:00) --> <strong>NOZOMI 223</strong> --> <strong>Shin-Osaka</strong> (11:30)</li>
-                    <li><strong>Asientos:</strong> Car.6 Seat.8-D y Car.6 Seat.8-E (¡Mirando al Fuji! 🤩)</li>
-                    <li><strong>Costo Total (2 personas):</strong> <span class="highlight">28,640 Yen</span></li>
-                    <li><strong>Guía para QR-Ticket:</strong> <a href="https://smart-ex.jp/en/entraining/qr/" target="_blank">smart-ex.jp/en/entraining/qr/</a></li>
-                    <li>Se compró solo la ida. El billete de vuelta Osaka-Tokio para el 21/06 por la tarde se debe comprar.</li>
+                    <li><strong>IDA: Tokio a Shin-Osaka</strong>
+                        <ul>
+                            <li><strong>Fecha:</strong> <span class="highlight">16 de Junio, 2025</span></li>
+                            <li><strong>Salida:</strong> Tokyo (09:00) --> <strong>NOZOMI 223</strong> --> <strong>Llegada:</strong> Shin-Osaka (11:30)</li>
+                            <li><strong>Asientos:</strong> Car.6 Seat.8-D y Car.6 Seat.8-E (¡Mirando al Fuji! 🤩)</li>
+                            <li><strong>Costo Total (2 personas, ida):</strong> <span class="highlight">28,640 Yen</span></li>
+                        </ul>
+                    </li>
+                    <li><strong>VUELTA: Shin-Osaka a Tokio</strong>
+                        <ul>
+                            <li><strong>Fecha:</strong> <span class="highlight">21 de Junio, 2025</span> (Por la tarde)</li>
+                            <li><strong>Asiento:</strong> Car.6 Seat.12-D (¡Confirmado!)</li>
+                            <li><em>(Nota: Recordar confirmar el horario exacto y número de tren para la vuelta).</em></li>
+                        </ul>
+                    </li>
+                    <li><strong>Guía para QR-Ticket (general):</strong> <a href="https://smart-ex.jp/en/entraining/qr/" target="_blank">smart-ex.jp/en/entraining/qr/</a></li>
                 </ul>
             </div>
             <details>
-                <summary>Consejos Generales de Transporte</summary>
+                <summary>Consejos Generales de Transporte (Ciudades)</summary>
                 <div class="details-content">
                     <ul>
-                        <li><strong>JR Pass:</strong> No comprar el <strong>JR Pass</strong> para el tren bala porque no conviene. Es mejor sacar tickets online y escanear el QR en las máquinas para imprimir.</li>
-                        <li><strong>Tren Bala (Shinkansen) - General:</strong>
-                            <ul>
-                                <li>De Tokio a Shin-Osaka cuesta aproximadamente 90€ ida solo por persona (referencia, el ticket de ida ya está comprado).</li>
-                                <li>Se recomienda viajar sentado a la <strong>derecha</strong> para ver el <strong>Monte Fuji</strong> 🗻 (confirmado para su viaje de ida).</li>
-                                <li><strong>¡IMPORTANTE!</strong> Los trenes bala (<strong>JR - Japan Railway</strong>) se tienen que reservar con tiempo porque se llenan rápido.</li>
-                            </ul>
-                        </li>
                         <li><strong>Tarjetas de Transporte Público (dentro de las ciudades):</strong>
                             <ul>
-                                <li><strong>MySuica:</strong> Tarjeta de transporte público.</li>
-                                <li><strong>Welcome SUICA</strong> o <strong>PASMO PASSPORT:</strong> Se saca física en el aeropuerto y no tiene comisión. Cargar 1500Y aprox. y si sobra se puede gastar en <strong>7-Eleven</strong> y demás tiendas.</li>
+                                <li><strong>MySuica:</strong> Tarjeta de transporte público (si ya se posee).</li>
+                                <li><strong>Welcome SUICA</strong> o <strong>PASMO PASSPORT:</strong> Se sacan físicas en el aeropuerto y no tiene comisión. Cargar 1500Y aprox. y si sobra se puede gastar en <strong>7-Eleven</strong> y demás tiendas.</li>
                                 <li><strong>Cuidado</strong> con las tarjetas de varios días (24-48-72) y distinguir la diferencia entre <strong>Metro</strong> y <strong>JR</strong>.</li>
                                 <li>La <strong>JR</strong> lleva a todos los lugares emblemáticos de Tokio.</li>
                             </ul>
@@ -722,7 +766,6 @@
                     
                     <div>
                         <a href="image.jpg" target="_blank" class="generic-button" style="margin-top:15px; margin-bottom:10px;">🗺️ Mapa de Barrios de Tokio</a>
-                        <p style="font-size:0.85em; color:#555;"><em>(Nota: Para que este botón funcione, debes tener una imagen llamada <strong>image.jpg</strong> en la misma carpeta que este archivo HTML.)</em></p>
                     </div>
 
 
@@ -1049,7 +1092,8 @@
             <hr>
             
             <h2 id="comida-general"><span role="img" aria-label="ramen">🍜</span> Guía de Comida General</h2>
-            <div class="details-content" style="padding-top:0; padding-left:0; padding-right:0;"> <details>
+            <div class="details-content" style="padding-top:10px; padding-left:0; padding-right:0; padding-bottom: 0;"> 
+                <details>
                     <summary>Comida Rápida Japonesa (Cadenas Populares)</summary>
                     <div class="details-content">
                         <p>Opciones ricas, rápidas y económicas para comer al paso. Precios promedio por plato.</p>
@@ -1075,7 +1119,7 @@
                     </div>
                 </details>
                 
-                <h3 style="margin-top: 25px; font-size: 1.3em; color: var(--h3-color); border-left: none; padding-left:0;"><span role="img" aria-label="puesto de comida">🥡</span> Comida Callejera y Especialidades por Ciudad</h3>
+                <h3 class="details-content-h3"><span role="img" aria-label="puesto de comida">🥡</span> Comida Callejera y Especialidades por Ciudad</h3>
                 <details>
                     <summary>Tokio</summary>
                     <div class="details-content">
@@ -1142,7 +1186,7 @@
                     </div>
                 </details>
 
-                <h3 style="margin-top: 25px; font-size: 1.3em; color: var(--h3-color); border-left: none; padding-left:0;"><span role="img" aria-label="helado">🍦</span> Postres (General)</h3>
+                <h3 class="details-content-h3"><span role="img" aria-label="helado">🍦</span> Postres (General)</h3>
                  <details>
                     <summary>Dulces Tentaciones</summary>
                     <div class="details-content">
@@ -1157,7 +1201,7 @@
                     </div>
                 </details>
 
-                <h3 style="margin-top: 25px; font-size: 1.3em; color: var(--h3-color); border-left: none; padding-left:0;"><span role="img" aria-label="sake">🍶</span> Bebidas (General)</h3>
+                <h3 class="details-content-h3"><span role="img" aria-label="sake">🍶</span> Bebidas (General)</h3>
                 <details>
                     <summary>Para Refrescarse y Brindar</summary>
                     <div class="details-content">
@@ -1179,7 +1223,9 @@
                         </ul>
                     </div>
                 </details>
-            </div> <hr>
+            </div> 
+            
+            <hr>
             
             <h2 id="locales-comerciales"><span role="img" aria-label="tienda">🏬</span> Locales Comerciales y Souvenirs (General)</h2>
             <p><em>Algunas tiendas tienen ubicaciones específicas en ciudades listadas en sus respectivas secciones (ej. Akihabara, Shinjuku). Las siguientes son cadenas generales o tipos de tiendas muy extendidas.</em></p>
@@ -1212,13 +1258,156 @@
                                 <li><strong>Tokio:</strong> Templo Senso-ji (Asakusa), Santuario Meiji Jingu (Harajuku).</li>
                                 <li><strong>Kioto:</strong> Templo Kiyomizu-dera, Santuario Fushimi Inari-taisha, Kinkaku-ji.</li>
                                 <li><strong>Lista de los Mejores 7 Goshuin de Japón (según una fuente):</strong> <a href="https://goo.gl/maps/f9zzfJEfP2UVpRxe8" target="_blank">Ver en Google Maps</a></li>
-                                <li><strong>Lista de Mejores Goshuinchos de Tokio (según una fuente):</strong> <a href="https://www.google.com/maps/d/viewer?mid=1G2s9vsoW8F2YEXzF8J0G6V5Xwz8&hl=en_US" target="_blank">Ver en Google Maps</a></li>
+                                <li><strong>Lista de Mejores Goshuinchos de Tokio (según una fuente):</strong> <a href="https://www.google.com/maps/place/Universal+Studios+Japan/@34.665442,135.4323382,17z/data=!3m1!4b1!4m6!3m5!1s0x6000e6284699564f:0xae793e284090b435!8m2!3d34.665442!4d135.4323382!16s%2Fg%2F12275y93?entry=ttu4" target="_blank">Ver en Google Maps</a></li>
                             </ul>
                         </li>
                         <li>Braian tiene dos "lugarcitos pa comprar kimono y ropita" que compartirá.</li>
                     </ul>
                 </div>
             </details>
+            
+            <hr>
+
+            <h2 id="frases-japonesas"><span role="img" aria-label="burbuja de diálogo">🗣️</span> Saludos y Cómo Hablar en Japonés</h2>
+            <div class="details-content" style="padding-top:10px; padding-left:0; padding-right:0; padding-bottom: 0;">
+                <details>
+                    <summary>Saludos y Cortesías</summary>
+                    <div class="details-content">
+                        <ul class="japanese-phrases-list">
+                            <li>
+                                <strong>Hola / Buenas días:</strong> Ohayō gozaimasu (おはようございます)<br>
+                                <em>Pronunciación:</em> O-ha-yoo go-zai-mas (la "o" de gozaimasu es larga)<br>
+                                <span class="usage-note"><em>Uso:</em> Formal, por la mañana. Puedes usar <em>Ohayō</em> (おはよう) en contextos más informales o con amigos.</span>
+                            </li>
+                            <li>
+                                <strong>Hola / Buenas tardes:</strong> Konnichiwa (こんにちは)<br>
+                                <em>Pronunciación:</em> Kon-ni-chi-wa<br>
+                                <span class="usage-note"><em>Uso:</em> El saludo más común y versátil, para usar durante el día.</span>
+                            </li>
+                            <li>
+                                <strong>Hola / Buenas noches:</strong> Konbanwa (こんばんは)<br>
+                                <em>Pronunciación:</em> Kon-ban-wa<br>
+                                <span class="usage-note"><em>Uso:</em> Para usar por la noche.</span>
+                            </li>
+                            <li>
+                                <strong>Adiós:</strong> Sayōnara (さようなら)<br>
+                                <em>Pronunciación:</em> Sa-yo-na-ra (la "o" es larga)<br>
+                                <span class="usage-note"><em>Uso:</em> Es bastante formal y puede sonar un poco definitivo. Para despedidas casuales, a menudo se usa un simple <em>Ja ne</em> (じゃね - "Nos vemos") o <em>Mata ne</em> (またね - "Hasta luego").</span>
+                            </li>
+                            <li>
+                                <strong>Gracias:</strong> Arigatō gozaimasu (ありがとうございます)<br>
+                                <em>Pronunciación:</em> A-ri-ga-too go-zai-mas (la "o" de arigato y gozaimasu son largas)<br>
+                                <span class="usage-note"><em>Uso:</em> Muy formal y agradecido. Puedes usar <em>Arigatō</em> (ありがとう) en contextos más informales.</span>
+                            </li>
+                            <li>
+                                <strong>De nada:</strong> Dō itashimashite (どういたしまして)<br>
+                                <em>Pronunciación:</em> Doo i-ta-shi-ma-shi-te (la "o" de dō es larga)<br>
+                                <span class="usage-note"><em>Uso:</em> Estándar y formal.</span>
+                            </li>
+                            <li>
+                                <strong>Por favor (al pedir):</strong> Onegai shimasu (お願いします)<br>
+                                <em>Pronunciación:</em> O-ne-gai shi-mas<br>
+                                <span class="usage-note"><em>Uso:</em> Al pedir un favor o al ordenar algo.</span>
+                            </li>
+                            <li>
+                                <strong>Por favor (al ofrecer):</strong> Dōzo (どうぞ)<br>
+                                <em>Pronunciación:</em> Doo-zo (la "o" es larga)<br>
+                                <span class="usage-note"><em>Uso:</em> Al ofrecer algo, invitar a pasar, o decir "adelante".</span>
+                            </li>
+                            <li>
+                                <strong>Disculpe / Permiso:</strong> Sumimasen (すみません)<br>
+                                <em>Pronunciación:</em> Su-mi-ma-sen<br>
+                                <span class="usage-note"><em>Uso:</em> Muy versátil. Para llamar la atención de alguien, pedir disculpas, o decir "permiso" al pasar.</span>
+                            </li>
+                            <li>
+                                <strong>Lo siento:</strong> Gomen nasai (ごめんなさい)<br>
+                                <em>Pronunciación:</em> Go-men na-sai<br>
+                                <span class="usage-note"><em>Uso:</em> Para disculparse por algo más serio que un "sumimasen".</span>
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary>En Restaurantes y Tiendas</summary>
+                    <div class="details-content">
+                        <ul class="japanese-phrases-list">
+                            <li>
+                                <strong>Mesa para dos personas, por favor:</strong> Futari desu. Onegai shimasu. (二人です。お願いします。)<br>
+                                <em>Pronunciación:</em> Fu-ta-ri des. O-ne-gai shi-mas.<br>
+                                <span class="usage-note"><em>Uso:</em> Literalmente "Somos dos personas. Por favor." Si fueran 3, dirías <em>Sannin desu. Onegai shimasu.</em> (三人です。お願いします。)</span>
+                            </li>
+                            <li>
+                                <strong>¿Aceptan tarjeta (de crédito)?:</strong> Kādo tsukaemasu ka? (カード使えますか？)<br>
+                                <em>Pronunciación:</em> Kaa-do tsu-ka-e-mas ka? (la "a" de kādo es larga)<br>
+                                <span class="usage-note"><em>Uso:</em> Directo y al punto. "Kādo" se refiere a tarjeta de crédito.</span>
+                            </li>
+                            <li>
+                                <strong>¿Cuánto cuesta?:</strong> Ikura desu ka? (いくらですか？)<br>
+                                <em>Pronunciación:</em> I-ku-ra des ka?
+                            </li>
+                            <li>
+                                <strong>Esto, por favor:</strong> Kore o onegai shimasu (これをお願いします)<br>
+                                <em>Pronunciación:</em> Ko-re o o-ne-gai shi-mas<br>
+                                <span class="usage-note"><em>Uso:</em> Señalando un objeto o plato en el menú.</span>
+                            </li>
+                            <li>
+                                <strong>Delicioso:</strong> Oishii desu (おいしいです)<br>
+                                <em>Pronunciación:</em> Oi-shii des (la "i" de oishii es larga)<br>
+                                <span class="usage-note"><em>Uso:</em> ¡A los japoneses les encanta escuchar esto!</span>
+                            </li>
+                            <li>
+                                <strong>La cuenta, por favor:</strong> Okaikei onegai shimasu (お会計お願いします)<br>
+                                <em>Pronunciación:</em> O-kai-kee o-ne-gai shi-mas (la "e" de okiakei es larga)<br>
+                            </li>
+                            <li>
+                                <strong>No, gracias:</strong> Iie, kekkō desu (いいえ、結構です)<br>
+                                <em>Pronunciación:</em> Ii-e, kek-koo des (la "i" de iie y la "o" de kekkō son largas)<br>
+                            </li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary>Direcciones y Transporte</summary>
+                    <div class="details-content">
+                        <ul class="japanese-phrases-list">
+                            <li>
+                                <strong>¿Dónde está...?:</strong> ...wa doko desu ka? (...はどこですか？)<br>
+                                <em>Pronunciación:</em> ...wa do-ko des ka?<br>
+                                <span class="usage-note"><em>Ej:</em> <em>Eki wa doko desu ka?</em> (¿Dónde está la estación?)</span>
+                            </li>
+                            <li><strong>Estación:</strong> Eki (駅)</li>
+                            <li><strong>Hotel:</strong> Hotēru (ホテル) (la "e" es larga)</li>
+                            <li><strong>Baño:</strong> Toire (トイレ)</li>
+                            <li><strong>Derecha:</strong> Migi (右)</li>
+                            <li><strong>Izquierda:</strong> Hidari (左)</li>
+                            <li><strong>Recto:</strong> Massugu (まっすぐ)</li>
+                        </ul>
+                    </div>
+                </details>
+                <details>
+                    <summary>Otras Frases Útiles</summary>
+                    <div class="details-content">
+                        <ul class="japanese-phrases-list">
+                            <li><strong>Sí:</strong> Hai (はい)</li>
+                            <li><strong>No:</strong> Iie (いいえ) (la "i" es larga)</li>
+                            <li>
+                                <strong>No entiendo:</strong> Wakarimasen (わかりません)<br>
+                                <em>Pronunciación:</em> Wa-ka-ri-ma-sen
+                            </li>
+                            <li>
+                                <strong>¿Habla inglés?:</strong> Eigo ga hanasemasu ka? (英語が話せますか？)<br>
+                                <em>Pronunciación:</em> Ei-go ga ha-na-se-mas ka? (la "ei" es un diptongo largo)
+                            </li>
+                            <li>
+                                <strong>Soy de Argentina:</strong> Watashi wa Aruzenchin-jin desu (私はアルゼンチン人です)<br>
+                                <em>Pronunciación:</em> Wa-ta-shi wa A-ru-zen-chin-jin des
+                            </li>
+                            <li><strong>¡Salud! (al brindar):</strong> Kanpai! (乾杯！)</li>
+                            <li><strong>¡Qué tengas un buen viaje!:</strong> Yoi tabi o! (良い旅を！) (la "o" de yoi es larga)</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
 
             <hr>
 
@@ -1340,8 +1529,7 @@
             
             const itineraryDetails = document.getElementById('itinerario-details');
             if (itineraryDetails) {
-                // Puedes decidir si quieres que el itinerario empiece cerrado o abierto
-                // itineraryDetails.open = false; // Para empezar cerrado
+                 // itineraryDetails.open = false; // Para empezar cerrado por defecto
             }
 
 
@@ -1351,10 +1539,10 @@
                     const targetId = this.getAttribute('href').substring(1);
                     let targetElement = document.getElementById(targetId);
 
-                    // Si el ID es de un H2 dentro de un details (como el itinerario),
-                    // el objetivo real para abrir/scroll es el <details> padre.
                     if (targetId === "itinerario" && document.getElementById("itinerario-details")) {
                         targetElement = document.getElementById("itinerario-details");
+                    } else if (targetId === "frases-japonesas" && document.getElementById("frases-japonesas")){
+                        targetElement = document.getElementById("frases-japonesas");
                     } else if (!targetElement && document.querySelector(`details[id="${targetId}"]`)) {
                         targetElement = document.querySelector(`details[id="${targetId}"]`);
                     }
@@ -1409,8 +1597,7 @@
                              if (Math.abs(sectionTop - activationOffset) < minDistance) {
                                 minDistance = Math.abs(sectionTop - activationOffset);
                                 current = section.getAttribute('id');
-                                // Si el ID es del H2 dentro del details del itinerario, usa el ID del details
-                                if (current === "itinerario" && section.parentElement.id === "itinerario-details") {
+                                if (current === "itinerario" && section.parentElement.id === "itinerario-details") { // Special handling for itinerary H2 inside details
                                     current = "itinerario-details";
                                 }
                             }
@@ -1429,7 +1616,9 @@
 
                 if (hashId === "itinerario" && document.getElementById("itinerario-details")) {
                     targetElement = document.getElementById("itinerario-details");
-                    hashId = "itinerario-details"; // Actualiza hashId para setActiveLink
+                    hashId = "itinerario-details"; 
+                } else if (hashId === "frases-japonesas" && document.getElementById("frases-japonesas")){
+                     targetElement = document.getElementById("frases-japonesas"); // No need to change hashId
                 } else if (!targetElement && document.querySelector(`details[id="${hashId}"]`)) {
                      targetElement = document.querySelector(`details[id="${hashId}"]`);
                 }
